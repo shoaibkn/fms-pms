@@ -1,0 +1,70 @@
+.billScreen_2 {
+  display: flex;
+  flex-direction: column;
+}
+.form-group-2 {
+  width: 50%;
+  justify-content: flex-start;
+  gap: 24px;
+}
+
+#fetchPendingBtn {
+  margin-top: 32px;
+}
+
+.typematerialList_2 {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  width: auto;
+  min-width: 800px;
+  width: 100%;
+  overflow-x: scroll;
+}
+.table-header {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+}
+
+.table-row-note {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 10px 20px;
+  height: auto;
+  background: #d9d9d9;
+  border-radius: 10px;
+  font-style: normal;
+  font-weight: 300;
+  font-size: 12px;
+  line-height: 18px;
+  margin-bottom: 6px;
+  gap: 5%;
+}
+
+span,
+p {
+  margin: 0;
+}
+
+.row-billNum-note {
+  width: fit-content;
+}
+.row-billDate-note {
+  width: fit-content;
+}
+.row-supName-note {
+  width: 25%;
+}
+.row-poNum-note {
+  width: 15%;
+}
+.row-mat-note {
+  width: 45%;
+}
+.row-amount-note {
+  width: fit-content;
+}

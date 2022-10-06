@@ -1,0 +1,158 @@
+sales order details from Shoetech
+to be used on purchase and order to collection modules
+
+SELECT
+    "A1"."QCSJ_C000000000300000_1" "ORDER_ID",
+    "A1"."PROD_ORDER_NO_8"         "PROD_ORDER_NO",
+    "A1"."PARTY_15"                "PARTY",
+    "A1"."ART_NO_5"                "ART_NO",
+    "A1"."COLOR_CD_9"              "COLOR_CD",
+    "A1"."BYR_STYLE_4"             "BYR_STYLE",
+    "A1"."BRAND_10"                "BRAND",
+    "A1"."ROW_QTY_6"               "ROW_QTY",
+    "A1"."BYR_ORD_DATE_3"          "BYR_ORD_DATE",
+    "A1"."SHIP_DT_7"               "SHIP_DT",
+    "A1"."ORDER_CATEGORY_17"       "ORDER_CATEGORY"
+FROM
+    (
+        SELECT
+            "A3"."ORDER_CATEGORY_ID_0"      "QCSJ_C000000000700000",
+            "A3"."QCSJ_C000000000300000_1"  "QCSJ_C000000000300000_1",
+            "A3"."QCSJ_C000000000300002_2"  "QCSJ_C000000000300002_2",
+            "A3"."BYR_ORD_DATE_3"           "BYR_ORD_DATE_3",
+            "A3"."BYR_STYLE_4"              "BYR_STYLE_4",
+            "A3"."ART_NO_5"                 "ART_NO_5",
+            "A3"."ROW_QTY_6"                "ROW_QTY_6",
+            "A3"."SHIP_DT_7"                "SHIP_DT_7",
+            "A3"."PROD_ORDER_NO_8"          "PROD_ORDER_NO_8",
+            "A3"."COLOR_CD_9"               "COLOR_CD_9",
+            "A3"."BRAND_10"                 "BRAND_10",
+            "A3"."QCSJ_C000000000300001_11" "QCSJ_C000000000300001",
+            "A3"."QCSJ_C000000000300003_12" "QCSJ_C000000000300003",
+            "A3"."QCSJ_C000000000500000_13" "QCSJ_C000000000500000",
+            "A3"."QCSJ_C000000000500001_14" "QCSJ_C000000000500001",
+            "A3"."PARTY_15"                 "PARTY_15",
+            "A2"."ORDER_CATEGORY_ID"        "QCSJ_C000000000700001",
+            "A2"."ORDER_CATEGORY"           "ORDER_CATEGORY_17"
+        FROM
+            (
+                SELECT
+                    "A5"."ORDER_CATEGORY_ID_0"      "ORDER_CATEGORY_ID_0",
+                    "A5"."QCSJ_C000000000300000_1"  "QCSJ_C000000000300000_1",
+                    "A5"."QCSJ_C000000000300002_2"  "QCSJ_C000000000300002_2",
+                    "A5"."BYR_ORD_DATE_3"           "BYR_ORD_DATE_3",
+                    "A5"."BYR_STYLE_4"              "BYR_STYLE_4",
+                    "A5"."ART_NO_5"                 "ART_NO_5",
+                    "A5"."ROW_QTY_6"                "ROW_QTY_6",
+                    "A5"."SHIP_DT_7"                "SHIP_DT_7",
+                    "A5"."PROD_ORDER_NO_8"          "PROD_ORDER_NO_8",
+                    "A5"."COLOR_CD_9"               "COLOR_CD_9",
+                    "A5"."BRAND_10"                 "BRAND_10",
+                    "A5"."QCSJ_C000000000300001_11" "QCSJ_C000000000300001_11",
+                    "A5"."QCSJ_C000000000300003_12" "QCSJ_C000000000300003_12",
+                    "A5"."PARTY_ID_13"              "QCSJ_C000000000500000_13",
+                    "A4"."PARTY_ID"                 "QCSJ_C000000000500001_14",
+                    "A4"."PARTY"                    "PARTY_15"
+                FROM
+                    (
+                        SELECT
+                            "A7"."ORDER_CATEGORY_ID" "ORDER_CATEGORY_ID_0",
+                            "A7"."ORDER_ID"          "QCSJ_C000000000300000_1",
+                            "A7"."FIN_YEAR"          "QCSJ_C000000000300002_2",
+                            "A7"."BYR_ORD_DATE"      "BYR_ORD_DATE_3",
+                            "A7"."BYR_STYLE"         "BYR_STYLE_4",
+                            "A7"."ART_NO"            "ART_NO_5",
+                            "A7"."ROW_QTY"           "ROW_QTY_6",
+                            "A7"."SHIP_DT"           "SHIP_DT_7",
+                            "A7"."PROD_ORDER_NO"     "PROD_ORDER_NO_8",
+                            "A7"."COLOR_CD"          "COLOR_CD_9",
+                            "A7"."BRAND"             "BRAND_10",
+                            "A6"."ORDER_ID"          "QCSJ_C000000000300001_11",
+                            "A6"."FIN_YEAR"          "QCSJ_C000000000300003_12",
+                            "A6"."PARTY_ID"          "PARTY_ID_13"
+                        FROM
+                            "SHOETECH"."SMS_ORDER_DTL" "A7",
+                            "SHOETECH"."SMS_ORDER"     "A6"
+                        WHERE
+                                "A6"."ORDER_ID" = "A7"."ORDER_ID"
+                            AND "A6"."FIN_YEAR" = '22-23'
+                    )                     "A5",
+                    "SHOETECH"."SM_PARTY" "A4"
+                WHERE
+                    "A5"."PARTY_ID_13" = "A4"."PARTY_ID"
+            )                         "A3",
+            "SHOETECH"."SM_ORDER_CAT" "A2"
+        WHERE
+            "A2"."ORDER_CATEGORY_ID" = "A3"."ORDER_CATEGORY_ID_0"
+    ) "A1"
+WHERE
+    "A1"."QCSJ_C000000000300002_2" = '22-23';
+
+
+
+    OR
+
+    SELECT SMS_ORDER_DTL.ORDER_ID, SMS_ORDER_DTL.PROD_ORDER_NO,SM_PARTY.PARTY, SMS_ORDER_DTL.ART_NO,
+    SMS_ORDER_DTL.COLOR_CD, SMS_ORDER_DTL.BYR_STYLE, SMS_ORDER_DTL.BRAND,
+    SMS_ORDER_DTL.ROW_QTY, SMS_ORDER_DTL.BYR_ORD_DATE, SMS_ORDER_DTL.SHIP_DT, 
+    SM_ORDER_CAT.ORDER_CATEGORY
+    FROM SMS_ORDER_DTL 
+    
+    JOIN SMS_ORDER
+    ON SMS_ORDER.ORDER_ID = SMS_ORDER_DTL.ORDER_ID
+    AND SMS_ORDER.FIN_YEAR = '22-23'
+    
+    JOIN SM_PARTY
+    ON SMS_ORDER.PARTY_ID = SM_PARTY.PARTY_ID
+    
+    
+    JOIN SM_ORDER_CAT 
+    ON SM_ORDER_CAT.ORDER_CATEGORY_ID = SMS_ORDER_DTL.ORDER_CATEGORY_ID
+    WHERE SMS_ORDER_DTL.FIN_YEAR = '22-23';
+
+////////////////////////////////////////////////////////////////////////////////////
+
+
+po details from Shoetech
+
+SELECT DISTINCT SMI_PO_DTL.PO_NO, SMI_PO_DTL.FIN_YEAR, SMI_PO_DTL.PO_TYP_CD,
+       SMI_PO_DTL.STORE_CD, SM_SUPPLIERS.SUPPLIER, SMI_PO_DTL.MAT_ID, SMI_PO_DTL.NOMEN1,
+       SM_UNIT.UNIT_NM, SMI_PO_DTL.QTY,
+       SMI_PO_DTL.QTY_RECV,SMI_PO.PO_DT, SMI_PO.DELV_DATE,SMS_ORDER_DTL.ORDER_ID
+FROM SMI_PO_DTL
+
+INNER JOIN SMI_PO
+    ON SMI_PO.PO_NO = SMI_PO_DTL.PO_NO
+    AND SMI_PO.FIN_YEAR = SMI_PO_DTL.FIN_YEAR
+    AND SMI_PO.STORE_CD = SMI_PO_DTL.STORE_CD
+    
+
+JOIN SM_SUPPLIERS
+    ON SMI_PO.PARTY_CD = SM_SUPPLIERS.SUPP_ID
+
+JOIN SM_UNIT
+    ON SMI_PO_DTL.UNIT_ID = SM_UNIT.UNIT_ID
+    
+LEFT JOIN SMI_PO_SUBDTL
+    ON SMI_PO_DTL.PO_NO = SMI_PO_SUBDTL.PO_NO
+    AND SMI_PO_DTL.FIN_YEAR = SMI_PO_SUBDTL.YCODE
+    AND SMI_PO_DTL.MAT_ID = SMI_PO_SUBDTL.MAT_ID
+
+LEFT JOIN SMS_ORDER_DTL  
+    ON SMS_ORDER_DTL.PROD_ORDER_NO = SMI_PO_SUBDTL.OS_NO
+    
+    WHERE SMI_PO.FIN_YEAR = '22-23'
+    ORDER BY SMI_PO_DTL.PO_NO,SMI_PO_DTL.MAT_ID;
+
+
+
+
+
+input,
+.select-input {
+  border-radius: 10px !important;
+  border: 1px solid;
+
+  margin-bottom: 20px;
+  height: 36px;
+}

@@ -1,0 +1,29 @@
+.typematerialList_2 {
+  min-width: 1200px;
+}
+
+.table-row-multi-grn {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: space-around;
+  padding: 20px 20px;
+  height: auto;
+  background: #d9d9d9;
+  border-radius: 10px;
+  font-style: normal;
+  font-weight: 300;
+  font-size: 12px;
+  line-height: 18px;
+  margin-bottom: 6px;
+}
+
+.table-row-multi-grn > p,
+span {
+  margin-top: 2px;
+}
+
+.input-form-value {
+  height: 14px;
+  margin: 0;
+}

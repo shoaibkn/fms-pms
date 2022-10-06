@@ -1,0 +1,623 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap");
+
+.App,
+#root {
+  margin: 0 120px 80px 120px;
+  font-family: "Poppins";
+}
+
+input,
+select {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  padding: 8px 0px 8px 14px;
+  gap: 10px;
+  min-width: 160px;
+  height: auto;
+  background: #ffffff;
+  border-radius: 10px;
+  border: 1.5px solid #538fea;
+  font-family: "Poppins";
+  font-size: 12px;
+  margin-top: 8px;
+  margin-bottom: 18px;
+}
+
+input::selection,
+select::selection {
+  border: 2.5px solid blue !important;
+}
+
+.header-navbar {
+  font-family: "Poppins";
+  margin: 0;
+  display: flex;
+  background-color: white;
+  flex-direction: row;
+  justify-content: flex-start;
+  width: 100%;
+  height: 80px;
+  overflow: hidden;
+  top: 0;
+  position: sticky;
+}
+
+.login-box {
+  box-sizing: border-box;
+  background: #f0f0f0;
+  padding: 40px 140px 40px 40px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 500;
+  width: 590px;
+  height: 535px;
+}
+
+.avatar-login {
+  width: 88px;
+  height: 88px;
+  margin-bottom: 50px;
+}
+
+.login-banner {
+  box-sizing: border-box;
+  background-color: #5c7ed6;
+  width: 590px;
+  height: 535px;
+  border-radius: 10px;
+  position: relative;
+}
+
+.login-screen {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: no wrap;
+  width: auto;
+  margin-top: 80px;
+  gap: 20px;
+  justify-content: center;
+}
+
+.loginBtn > button {
+  margin-top: 36px;
+  padding: 6px 72px;
+  background-color: #d9d9d9;
+  background: #d9d9d9;
+  border-radius: 10px;
+  border: 0 none;
+  font-family: "Poppins";
+}
+
+#account-avt {
+  width: 27px;
+  height: 27px;
+  margin: 34px 0;
+}
+
+#hamburger-menu {
+  width: 48px;
+  height: 48px;
+  margin: 26px 0;
+}
+
+.nav-data {
+  margin-right: auto;
+  margin-top: 5px;
+  margin-left: 60px;
+}
+
+.nav-data > h3 {
+  font-weight: 500;
+  font-size: 20px;
+  margin-bottom: 0;
+}
+
+.nav-data > span {
+  font-size: 14px;
+  font-weight: 500;
+  margin-top: 0;
+  margin-bottom: 10px;
+  text-decoration: none;
+}
+.stats-block {
+  box-sizing: border-box;
+  min-width: 373px;
+  height: 160px;
+  background: #d9d9d9;
+  border-radius: 10px;
+  margin-top: 27px;
+  padding: 102px 13px 37px 13px;
+  margin-right: 20px;
+}
+
+#stats-window {
+  display: flex;
+  overflow-x: auto;
+  flex: 0 0 2em;
+}
+
+#stats-window::-webkit-scrollbar,
+.window::-webkit-scrollbar {
+  display: none;
+}
+
+.block {
+  box-sizing: border-box;
+  min-width: 32%;
+  height: 97px;
+  background-color: #d9d9d9;
+  border-radius: 10px;
+  font-weight: 500;
+  font-size: 14px;
+  padding: 54px 10px 12px 10px;
+  box-shadow: 2px 4px 4px rgba(0, 0, 0, 0.1);
+}
+
+.block:hover {
+  box-shadow: none;
+}
+
+.block > a {
+  text-decoration: none;
+  color: black;
+}
+
+.window {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  gap: 20px;
+  min-height: 180px;
+  margin-top: 6px;
+  overflow-y: auto;
+}
+
+.section-heading {
+  font-size: 24px;
+  font-weight: 500;
+}
+
+.frame {
+  margin-top: 80px;
+}
+
+.slide-menu {
+  background-color: white;
+  box-sizing: border-box;
+  border-radius: 0 10px 10px 0;
+  height: 100%;
+  width: 300px;
+  padding: 40px 50px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  justify-content: space-between;
+  box-shadow: 0px 4px 24px rgba(0, 0, 0, 0.25);
+}
+
+.slide-menu > svg {
+  height: 84px;
+  width: auto;
+}
+
+.slide-menu > ul > li {
+  margin: 20px 0;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.log-menu {
+  height: 36px;
+  width: auto;
+  align-self: center;
+}
+
+.input-menu,
+.select-input {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  padding: 8px 0px 8px 14px;
+  gap: 10px;
+}
+
+input[type="button"] {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  padding: 9px 18px;
+  gap: 10px;
+  min-width: unset;
+  height: fit-content;
+  background: #5c7ed6;
+  border: 1px solid #4476f7;
+  box-shadow: 2px 6px 5px rgba(0, 0, 0, 0.25);
+  border-radius: 10px;
+  color: white;
+}
+
+#billNum {
+  min-width: unset;
+  width: 156px;
+}
+
+.table-header {
+  box-sizing: border-box;
+  background-color: #5c7ed6;
+  height: 43px;
+  padding: 12px 60px 12px 20px;
+  margin-bottom: 15px;
+  margin-top: 44px;
+  border-radius: 10px;
+  color: white;
+  font-size: 12px;
+  line-height: 18px;
+  font-weight: 300;
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-between;
+}
+
+.screen-header {
+  margin: 40px 0;
+  font-weight: 300;
+  font-size: 32px;
+  line-height: 48px;
+}
+
+label {
+  font-weight: 400;
+  font-size: 15px;
+  line-height: 22px;
+}
+
+#poNum {
+  min-width: unset;
+  width: 134px;
+}
+
+.form-group-1 {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  gap: 2%;
+}
+.form-group-2 {
+  display: flex;
+  width: 40%;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+}
+
+#poAddButton {
+  margin-top: 30px;
+}
+
+.form-group-3 {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 40%;
+}
+
+#fetchMaterialBtn {
+  position: relative;
+  top: 40px;
+  float: right;
+  z-index: -999;
+}
+.materialList {
+  width: 50%;
+}
+
+.table-row {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+  padding: 10px 20px;
+  height: auto;
+  background: #d9d9d9;
+  border-radius: 10px;
+  gap: 10%;
+  font-style: normal;
+  font-weight: 300;
+  font-size: 12px;
+  line-height: 18px;
+  margin-bottom: 6px;
+}
+
+.row-material {
+  width: 50%;
+}
+
+.input-form-value {
+  min-width: unset;
+  width: 87px;
+}
+
+.material-rows {
+  display: flex;
+  flex-direction: column;
+  height: 400px;
+  overflow-y: scroll;
+}
+
+.row-uom {
+  margin-top: 12px;
+}
+
+.imageUploadSection {
+  margin-bottom: 0;
+}
+.imageUploadSection > span {
+  font-size: 8px;
+  margin-top: 0;
+  padding-top: 0;
+  position: relative;
+  bottom: 40px;
+}
+
+.typematerialList {
+  width: auto;
+}
+
+.billImage {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 40%;
+}
+
+.billImage > img,
+.billImageSRC {
+  box-sizing: border-box;
+  background-color: #d9d9d9;
+  border-radius: 10px;
+  height: 100%;
+  left: 806px;
+}
+#submitBill {
+  width: fit-content;
+}
+
+.billScreen {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.materialRow,
+.table-row-multi {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+  padding: 10px 20px;
+  height: auto;
+  background: #d9d9d9;
+  border-radius: 10px;
+
+  font-style: normal;
+  font-weight: 300;
+  font-size: 12px;
+  line-height: 18px;
+  margin-bottom: 6px;
+}
+
+#materialNameInput {
+  width: 50%;
+  min-width: fit-content;
+}
+
+.material-rows-single {
+  height: auto;
+  overflow-y: unset;
+}
+
+.compEntry {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  width: 30%;
+  height: auto;
+}
+#issueTransferBtn,
+#recvTransferBtn,
+#printReportBtn {
+  width: fit-content;
+}
+
+.float-checkbox {
+  min-width: auto;
+  margin: 0 30px 0 0;
+  padding: 0;
+  width: 24px;
+  height: 24px;
+  box-sizing: border-box;
+}
+
+#fetchBillsByDate {
+  margin-top: 34px;
+}
+
+.button-flex {
+  display: flex;
+  flex-direction: row;
+  gap: 40px;
+}
+
+@media only screen and (min-width: 320px) and (max-width: 640px) {
+  .App,
+  #root,
+  body {
+    margin: 10px;
+  }
+
+  .nav-data {
+    margin-top: 0px;
+    margin-left: 20px;
+  }
+  #hamburger-menu {
+    width: 32px;
+    height: 32px;
+    margin: 10px 18px 0 0;
+  }
+  .header-navbar {
+    height: 60px;
+    margin: 0;
+  }
+
+  .nav-data > h3 {
+    margin-top: 13px;
+    font-weight: 500;
+    font-size: 16px;
+  }
+
+  .nav-data > h6 {
+    font-size: 12px;
+    font-weight: 500;
+  }
+
+  .login-box {
+    padding: 40px 140px 40px 40px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 500;
+    width: 100%;
+    height: 535px;
+  }
+
+  .avatar-login {
+    width: 88px;
+    height: 88px;
+    margin-bottom: 50px;
+  }
+
+  .login-banner {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    top: 40px;
+  }
+
+  .login-screen {
+    margin-top: 80px;
+    gap: 20px;
+  }
+
+  #loginBtn > button {
+    margin-top: 36px;
+    padding: 6px 72px;
+    background-color: #d9d9d9;
+    background: #d9d9d9;
+    border-radius: 10px;
+    border: 0 none;
+  }
+
+  #account-avt {
+    display: none;
+  }
+
+  .stats-block {
+    min-width: 277px;
+    height: 116px;
+    margin-top: 10px;
+    padding: 74px 10x 20px 10px;
+    margin-right: 10px;
+  }
+
+  .stats-block > h3 {
+    margin-top: 0;
+  }
+
+  .block {
+    height: 97px;
+    width: 46%;
+    font-weight: 500;
+    font-size: 12px;
+    padding: 50px 10px 9px 9px;
+  }
+
+  .block-name {
+    width: 90%;
+  }
+
+  .window {
+    gap: auto;
+    height: 220px;
+    overflow-y: auto;
+    width: auto;
+  }
+
+  .section-heading {
+    font-size: 24px;
+    font-weight: 500;
+  }
+
+  .frame {
+    margin-top: 80px;
+  }
+  .form-group-1 {
+    gap: 5%;
+    width: auto;
+  }
+  .form-group-2 {
+    width: auto;
+    gap: 5% !important;
+  }
+  .form-group-3 {
+    width: 100%;
+  }
+
+  .typematerialList {
+    width: 100%;
+  }
+  .billImageSRC {
+    display: none;
+  }
+  .billScreen {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .materialRow {
+    width: auto;
+  }
+
+  #materialNameInput {
+    min-width: 135px;
+  }
+
+  #materialUOMInput {
+    width: 35px;
+  }
+
+  #materialQtyInput {
+    width: 60px;
+  }
+
+  #recvBy {
+    width: 150px;
+  }
+
+  #awbInput {
+    width: 162px;
+  }
+
+  #courierPartner {
+    width: 144px;
+  }
+  .compEntry {
+    width: 100%;
+    height: auto;
+  }
+}
