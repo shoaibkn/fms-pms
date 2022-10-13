@@ -13,6 +13,7 @@ import StoreTasks from "./pages/store_tasks";
 import WOBillReceive from "./pages/wo_bill_receive";
 import NotFound from "./pages/404";
 import HeaderNav from "./components/desk-nav";
+import ComponentTest from "./pages/componentTest";
 
 function App() {
   const uname = "Shoaib";
@@ -32,6 +33,7 @@ function App() {
         <Route path="dashboard/grn_tasks" element={<GRNTasks />} />
         <Route path="dashboard/store_tasks" element={<StoreTasks />} />
         <Route path="dashboard/wo_bill_receive" element={<WOBillReceive />} />
+        <Route path="componentTest" element={<ComponentTest />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>

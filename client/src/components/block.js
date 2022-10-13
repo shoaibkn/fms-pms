@@ -5,11 +5,11 @@ export default function Block(props) {
   let vArr = props.values;
   for (let v of vArr) {
     final.push(
-      <div className="block">
-        <Link to={linkName(v)}>
+      <Link to={linkName(v)} className="blockLink">
+        <div className="block">
           <div className="block-name">{v}</div>
-        </Link>
-      </div>
+        </div>
+      </Link>
     );
   }
   return final;

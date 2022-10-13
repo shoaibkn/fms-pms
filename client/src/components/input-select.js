@@ -1,9 +1,13 @@
 export default function SelectInput(props) {
   let supList = props.list;
   let list = [];
-  for (let sup of supList) {
-    list.push(<option value={sup}>{sup}</option>);
-  }
+  supList.map((sup, idx) => {
+    list.push(
+      <option key={idx} value={sup}>
+        {sup}
+      </option>
+    );
+  });
   return (
     <div>
       <label htmlFor="props.for">{props.name}</label>

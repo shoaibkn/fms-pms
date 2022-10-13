@@ -5,7 +5,11 @@ export default function TableHeader(props) {
   let styleFG = props.flexG;
 
   for (var i = 0; i < tHead.length; i++) {
-    header.push(<span style={styleFG[i]}>{tHead[i]}</span>);
+    header.push(
+      <span key={i} style={styleFG[i]}>
+        {tHead[i]}
+      </span>
+    );
   }
 
   return <div className="table-header">{header}</div>;

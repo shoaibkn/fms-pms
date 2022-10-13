@@ -91,7 +91,7 @@ export default function LoginBox() {
                 />
               </svg>
             </div>
-            <form onSubmit={handleSubmit}>
+            <form>
               <div className="">
                 <label className="">Username</label>
                 <br></br>
@@ -117,11 +117,13 @@ export default function LoginBox() {
                   required
                 ></input>
               </div>
-              <div id="loginBtn">
-                <button type="button" id="loginBtn" onClick={handleSubmit}>
-                  Login
-                </button>
-              </div>
+              <Link to="dashboard">
+                <div id="loginBtn">
+                  <button type="button" id="loginBtn">
+                    Login
+                  </button>
+                </div>
+              </Link>
             </form>
             <p
               ref={errRef}

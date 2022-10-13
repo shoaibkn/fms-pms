@@ -6,39 +6,11 @@ import SelectInput from "../components/input-select";
 import TableHeader from "../components/table-header";
 import TableRowStatic from "../components/table-row-static";
 export default function CourierIn() {
-  const [addedMat, setAddMat] = useState([
-    { mat: "fff", uom: "Pau", qty: "1" },
-  ]);
+  const [addedMat, setAddMat] = useState([]);
 
-  /* function addItem() {
-    const currentAr = addedMat;
-    let temp = [
-      "GENERAL CEMENT ROLL WHITE;ROLL;20",
-      "MACHINERY TOOLS RGR CLOTH (EMRY BELT)G-36 TO 320 -;PCS;20",
-      "CHEMICALS REPLAN RV -;LTR;20",
-      "ADHESIVE 999 (25 LTR) -;LTR;20",
-      "CHEMICALS HARDENER C;LTR;20",
-      "ADHESIVE HENKEL PU 6100 -;LTR;20",
-      "CHEMICALS HENKEL 007 WITH POWDER -;LTR;20",
-      "ADHESIVE HENKEL PU 6100 -;LTR;20",
-    ];
-    let mat = document.getElementById("materialNameInput").value;
-    let uom = document.getElementById("materialUOMInput").value;
-    let qty = document.getElementById("materialQtyInput").value;
-    let str = mat + ";" + uom + ";" + qty;
-    if (str == ";;") {
-      return 0;
-    }
-    currentAr.push(str);
-    //addedMat.push(currentAr);
-    setAddMat(currentAr);
-    console.log(currentAr);
-    console.log(addedMat);
-    document.getElementById("materialNameInput").value = "";
-    document.getElementById("materialUOMInput").value = "";
-    document.getElementById("materialQtyInput").value = "";
-  }
-*/
+  useEffect(() => {
+    document.getElementsByClassName("material-rows");
+  });
 
   let handleClick = () => {
     let cur = addedMat;
@@ -54,19 +26,6 @@ export default function CourierIn() {
     console.log(addedMat);
     //return cur;
   };
-
-  let td;
-
-  let matData = [
-    "GENERAL CEMENT ROLL WHITE;ROLL;20",
-    "MACHINERY TOOLS RGR CLOTH (EMRY BELT)G-36 TO 320 -;PCS;20",
-    "CHEMICALS REPLAN RV -;LTR;20",
-    "ADHESIVE 999 (25 LTR) -;LTR;20",
-    "CHEMICALS HARDENER C;LTR;20",
-    "ADHESIVE HENKEL PU 6100 -;LTR;20",
-    "CHEMICALS HENKEL 007 WITH POWDER -;LTR;20",
-    "ADHESIVE HENKEL PU 6100 -;LTR;20",
-  ];
 
   return (
     <div className="billScreen">
@@ -162,20 +121,16 @@ export default function CourierIn() {
           />
           <div className="material-rows">
             {
-              //<TableRowStatic matName={m.mat} uom={m.uom} qty={m.qty} />
-              (td = () => {
-                let d = [];
-                for (let ro of addedMat) {
-                  d.push(
-                    <TableRowStatic
-                      matName={ro.mat}
-                      uom={ro.uom}
-                      qty={ro.qty}
-                    />
-                  );
-                }
-                return d;
+              addedMat.map((mat, idx) => {
+                console.log(idx);
+                <TableRowStatic
+                  matName={mat.mat}
+                  uom={mat.uom}
+                  qty={mat.qty}
+                  id={idx}
+                />;
               })
+              //<TableRowStatic matName={m.mat} uom={m.uom} qty={m.qty} />
             }
           </div>
         </div>
