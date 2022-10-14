@@ -9,8 +9,8 @@ export default function CourierIn() {
   const [addedMat, setAddMat] = useState([]);
 
   useEffect(() => {
-    document.getElementsByClassName("material-rows");
-  });
+    setAddMat(handleClick());
+  }, []);
 
   let handleClick = () => {
     let cur = addedMat;
@@ -24,7 +24,7 @@ export default function CourierIn() {
     cur.push(str);
     setAddMat(cur);
     console.log(addedMat);
-    //return cur;
+    return cur;
   };
 
   return (
@@ -121,15 +121,14 @@ export default function CourierIn() {
           />
           <div className="material-rows">
             {
-              addedMat.map((mat, idx) => {
-                console.log(idx);
+              addedMat.map((mat, idx) => (
                 <TableRowStatic
                   matName={mat.mat}
                   uom={mat.uom}
                   qty={mat.qty}
                   id={idx}
-                />;
-              })
+                />
+              ))
               //<TableRowStatic matName={m.mat} uom={m.uom} qty={m.qty} />
             }
           </div>

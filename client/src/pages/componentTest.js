@@ -21,15 +21,15 @@ export default function ComponentTest() {
         />
         <div className="material-rows">
           {
-            addedMat.map((mat, idx) => {
+            addedMat.map((mat, idx) => (
               //console.log(idx);
               <TableRowStatic
                 matName={mat.mat}
                 uom={mat.uom}
                 qty={mat.qty}
                 id={idx}
-              />;
-            })
+              />
+            ))
             //<TableRowStatic matName={m.mat} uom={m.uom} qty={m.qty} />
           }
         </div>
