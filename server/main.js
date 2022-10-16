@@ -1,18 +1,23 @@
 const express = require("express");
 const app = express();
 const path = require("path");
+const cors = require("cors");
 
 app.use(express.static(path.join(__dirname, "build")));
-
+app.use(cors());
+//res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
 app.get("/", (req, res) => {
   //res.sendFile(path.join(__dirname, "build", "index.html"));
-  let user = "admin";
-  let pass = "admin";
-  res.send(authn(user, pass));
+  res.send("backend working");
+  console.log(res);
+});
+
+app.get("/user:id", (req, res) => {
+  res.send("User " + req.params.id);
 });
 
 app.listen("3500");
-
+/*
 function authn(user, pass) {
   if (user === "admin" && pass === "admin") {
     return (mod_list = [
@@ -41,3 +46,4 @@ function authn(user, pass) {
   }
   //return status accepted and an array of all user modules
 }
+*/

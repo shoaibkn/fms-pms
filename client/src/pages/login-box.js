@@ -1,4 +1,5 @@
 import React from "react";
+import { setUserSession } from "./utils/common";
 import {
   BrowserRouter as Router,
   Route,
@@ -12,7 +13,7 @@ import Dashboard from "./dashboard";
 import axios from "../api/axios";
 const LOGIN_URL = "/auth";
 
-export default function LoginBox() {
+export default function LoginBox(props) {
   const { setAuth } = useContext(AuthContext);
   const userRef = useRef();
   const errRef = useRef();
@@ -30,41 +31,23 @@ export default function LoginBox() {
     setErrMsg("");
   }, [user, pwd]);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    console.log(user, pwd);
-    try {
-      const response = await axios.post(
-        LOGIN_URL,
-        JSON.stringify({ user, pwd }),
-        {
-          headers: { "Content-Type": "application/json" },
-          withCredentials: true,
-        }
-      );
-      console.lof(response);
-      console.log(JSON.stringify(response?.data));
-      console.log(JSON.stringify(response));
-      const accessToken = response?.data?.accessToken;
-      const modules = response?.data?.modules;
-      setUser("");
-      setPwd("");
-
-      //setSuccess(true);
-    } catch (err) {
-      if (!err?.response) {
-        setErrMsg("No Server Response");
-      } else if (err.response?.status === 400) {
-        setErrMsg("Missing Username/Password");
-      } else if (err.response?.status === 401) {
-        setErrMsg("Unauthorised");
-      }
-    }
-  };
+  const handleSubmit = async (e) => {};
   const postCreds = () => {
     const username = document.getElementById("uName").value;
     const password = document.getElementById("uPass").value;
-
+    console.log(username + " : " + password);
+    try {
+      //axios.get("http://localhost:3500");
+      axios
+        .post("http://localhost:3500/signin", {
+          username: username.value,
+          password: password.value,
+        })
+        .then((response) => {
+          setUserSession(response.data.token, response.data.user);
+          props.history.push("/dashboard");
+        });
+    } catch (error) {}
     //implement post function here
   };
 
@@ -117,13 +100,12 @@ export default function LoginBox() {
                   required
                 ></input>
               </div>
-              <Link to="dashboard">
-                <div id="loginBtn">
-                  <button type="button" id="loginBtn">
-                    Login
-                  </button>
-                </div>
-              </Link>
+
+              <div id="loginBtn">
+                <button type="button" id="loginBtn" onClick={postCreds}>
+                  Login
+                </button>
+              </div>
             </form>
             <p
               ref={errRef}
