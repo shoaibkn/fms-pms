@@ -52,27 +52,37 @@ app.post("/login", async (req, res) => {
   const user = await Users.findOne({ where: { username: username } });
 
   if (!user) {
-    res.status(400).json({ error: "User not found" });
+    res.json({ error: "User not found", message: "User not found" });
+    console.log("User Not Found");
+
     return 0;
   }
   const dbPassword = user.passwd;
   bcrypt.compare(password, dbPassword).then((match) => {
     if (!match) {
-      res.status(400).json({ error: "Incorrect Username/Password" });
+      res.json({
+        error: "Incorrect Username/Password",
+        message: "Incorrect Username/Password",
+      });
       console.log({ error: "Incorrect Username/Password" });
     } else {
       const accessToken = createToken(user);
       res.cookie("access-token", accessToken, {
         maxAge: 60 * 60 * 4,
       });
-      res.status(200).json({ message: "User AUthenticated" });
+      res
+        .status(200)
+        .json({ error: "User Authenticated", message: "User Authenticated" });
       console.log({ message: "User Authenticated" });
     }
   });
 });
 
 app.get("/profile", validateToken, (req, res) => {
-  res.json("profile");
+  var data = req.headers.cookie;
+
+  console.log(data.split("; "));
+  res.json({ sessionStatus: true, mod_list: modGen(501) });
 });
 const modGen = (mod_id) => {
   if (mod_id == 501) {

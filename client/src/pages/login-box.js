@@ -16,7 +16,7 @@ const LOGIN_URL = "/auth";
 export default function LoginBox(props) {
   const [usernameL, setUsername] = useState("");
   const [passwordL, setPassword] = useState("");
-  const [loginStatus, setLoginStatus] = useState("Nothing ");
+  const [loginStatus, setLoginStatus] = useState("");
 
   const login = () => {
     //console.log(axios.post("http://localhost:3500/login", {username: usernameL,password: passwordL,}).value);
@@ -27,16 +27,28 @@ export default function LoginBox(props) {
         password: passwordL,
       })
       .then((response) => {
-        //console.log(response.data.message);
-        if (!response.data.message) {
+        console.log(response.data.message);
+        if (!response) {
           setLoginStatus(response.data.message);
+          //console.log(response.data.message);
         } else {
-          setLoginStatus(response.data[0].message);
+          //console.log(response.data.message);
+          setLoginStatus(response.data.message);
         }
       })
       .catch((err) => {
         //console.log(err);
       });
+  };
+
+  const handleSession = (loginStatus) => {
+    let rt = "";
+    if (loginStatus == "User Authenticated") {
+      rt = "/dashboard";
+      return rt;
+    } else {
+      return rt;
+    }
   };
   /*
   const register = () => {
@@ -96,12 +108,14 @@ export default function LoginBox(props) {
               ></input>
             </div>
 
-            <div id="loginBtn">
-              <button type="button" id="loginBtn" onClick={login}>
-                Login
-              </button>
-            </div>
-            <h1>{loginStatus}</h1>
+            <Link to={handleSession}>
+              <div id="loginBtn">
+                <button type="button" id="loginBtn" onClick={login}>
+                  Login
+                </button>
+              </div>
+            </Link>
+            <div className="error-message">{loginStatus}</div>
           </form>
         </div>
         <div className="login-banner"></div>
