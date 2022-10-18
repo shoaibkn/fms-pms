@@ -11,6 +11,7 @@ const bcrypt = require("bcrypt");
 const db = require("./models");
 const models = require("./models");
 const Users = db.Users;
+const { createToken, validateToken } = require("./JWT");
 //app.use(express.static(path.join(__dirname, "build")));
 app.use(
   cors({
@@ -51,8 +52,8 @@ app.post("/login", async (req, res) => {
   const user = await Users.findOne({ where: { username: username } });
 
   if (!user) {
-    console.log("User Not Found");
     res.status(400).json({ error: "User not found" });
+    return 0;
   }
   const dbPassword = user.passwd;
   bcrypt.compare(password, dbPassword).then((match) => {
@@ -60,10 +61,18 @@ app.post("/login", async (req, res) => {
       res.status(400).json({ error: "Incorrect Username/Password" });
       console.log({ error: "Incorrect Username/Password" });
     } else {
+      const accessToken = createToken(user);
+      res.cookie("access-token", accessToken, {
+        maxAge: 60 * 60 * 4,
+      });
       res.status(200).json({ message: "User AUthenticated" });
       console.log({ message: "User Authenticated" });
     }
   });
+});
+
+app.get("/profile", validateToken, (req, res) => {
+  res.json("profile");
 });
 const modGen = (mod_id) => {
   if (mod_id == 501) {
