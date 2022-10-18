@@ -7,15 +7,10 @@ const bp = require("body-parser");
 const cookieParser = require("cookie-parser");
 const session = require("express-session");
 const bcrypt = require("bcrypt");
-const { Users } = require("./models");
-
-const db = mysql.createConnection({
-  user: "root",
-  host: "localhost",
-  password: "Vrd@1234",
-  database: "vrd_app",
-});
-
+//const AuthnDbModel = require("./models/authn_db");
+const db = require("./models");
+const models = require("./models");
+const Users = db.Users;
 //app.use(express.static(path.join(__dirname, "build")));
 app.use(
   cors({
@@ -50,33 +45,6 @@ app.post("/register", (req, res) => {
     );
   });
 });
-/*
-app.post("/login", (req, res) => {
-  const username = req.body.username;
-  const password = req.body.password;
-  console.log("Username : " + username);
-  console.log("Password : " + password);
-  db.execute(
-    "SELECT passwd, module_ids FROM authn_db where username = ? and passwd = ?",
-    [username, password],
-    (err, result) => {
-      let hash = bcrypt.hash(password, 1);
-      console.log(hash);
-      if (err) {
-        res.send({ err: err });
-        res.send("Username/Password Incorrect");
-      }
-      if (result.length > 0) {
-        if (bcrypt.compare(password, result[0].passwd)) {
-          console.log("Logged in");
-          res.send("Logged in");
-        }
-        //res.send(modGen(result[0].module_ids));
-        //console.log(modGen(result[0].module_ids));
-      } else ({ message: "Wrong Username or password!" });
-    }
-  );
-});*/
 
 app.post("/login", async (req, res) => {
   const { username, password } = req.body;
@@ -86,36 +54,17 @@ app.post("/login", async (req, res) => {
     console.log("User Not Found");
     res.status(400).json({ error: "User not found" });
   }
-  const dbPassword = user.password;
+  const dbPassword = user.passwd;
   bcrypt.compare(password, dbPassword).then((match) => {
     if (!match) {
       res.status(400).json({ error: "Incorrect Username/Password" });
+      console.log({ error: "Incorrect Username/Password" });
     } else {
       res.status(200).json({ message: "User AUthenticated" });
+      console.log({ message: "User Authenticated" });
     }
   });
 });
-
-/*
-app.post("/login", (req, res) => {
-  //const username = req.body.username;
-  //const password = req.body.password;
-  db.execute(
-    "SELECT module_ids FROM authn_db where username = 'admin' and passwd = 'admin'",
-
-    (err, result) => {
-      if (err) {
-        res.send({ err: err });
-        console.log(err);
-      }
-      if (result.length > 0) {
-        res.send(modGen(result[0].module_ids));
-        console.log(modGen(result[0].module_ids));
-      } else ({ message: "Wrong Username or password!" });
-    }
-  );
-});*/
-
 const modGen = (mod_id) => {
   if (mod_id == 501) {
     return (mod_list = [
@@ -144,3 +93,9 @@ const modGen = (mod_id) => {
   }
   //return status accepted and an array of all user modules
 };
+
+db.sequelize.sync().then(() => {
+  app.listen(3501, () => {
+    console.log("SERVER RUNNING ON PORT 3501");
+  });
+});

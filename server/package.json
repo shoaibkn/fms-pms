@@ -25,6 +25,7 @@
     "oracledb": "^5.5.0",
     "path": "^0.12.7",
     "sequelize": "^6.25.2",
+    "sequelize-automate": "^1.2.2",
     "sequelize-cli": "^6.5.1"
   }
 }
