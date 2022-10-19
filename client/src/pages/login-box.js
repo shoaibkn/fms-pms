@@ -6,10 +6,12 @@ import {
   Link,
   Routes,
   json,
+  useNavigate,
 } from "react-router-dom";
 import { useRef, useState, useEffect, useContext } from "react";
 import AuthContext from "../context/authProvider";
 import Dashboard from "./dashboard";
+import Cookies from "js-cookie";
 import axios from "axios";
 const LOGIN_URL = "/auth";
 
@@ -17,23 +19,44 @@ export default function LoginBox(props) {
   const [usernameL, setUsername] = useState("");
   const [passwordL, setPassword] = useState("");
   const [loginStatus, setLoginStatus] = useState("");
-
+  const [passwordInputClass, setPasswordInputClass] = useState("");
+  const [usernameInputClass, setUsernameInputClass] = useState("");
+  const [redirect, setRedirect] = useState("");
+  let navigate = useNavigate();
   const login = () => {
     //console.log(axios.post("http://localhost:3500/login", {username: usernameL,password: passwordL,}).value);
-    console.log(usernameL + " : " + passwordL);
+    //console.log(usernameL + " : " + passwordL);
     axios
       .post("http://localhost:3500/login", {
         username: usernameL,
         password: passwordL,
       })
       .then((response) => {
-        console.log(response.data.message);
+        //console.log(response.data.message);
         if (!response) {
           setLoginStatus(response.data.message);
-          //console.log(response.data.message);
+          console.log("NO response");
         } else {
           //console.log(response.data.message);
           setLoginStatus(response.data.message);
+          if (response.data.message === "User Not Found") {
+            //highlight Username Input
+            setUsernameInputClass("usernameInputClass");
+            console.log("Unknown User");
+          } else if (response.data.message === "Incorrect Username/Password") {
+            //highlight username and password inputs
+            setUsernameInputClass("usernameInputClass");
+            setPasswordInputClass("passwordInputClass");
+            console.log("Incorrect Username/Password");
+          } else if (response.data.message === "User Authenticated") {
+            setUsernameInputClass("");
+            setPasswordInputClass("");
+            setRedirect("/dashboard");
+            sessionStorage.setItem("access-token", response.data.token);
+            sessionStorage.setItem("username", response.data.username);
+            sessionStorage.setItem("module_list", response.data.module_list);
+            navigate("/dashboard");
+          }
         }
       })
       .catch((err) => {
@@ -41,15 +64,6 @@ export default function LoginBox(props) {
       });
   };
 
-  const handleSession = (loginStatus) => {
-    let rt = "";
-    if (loginStatus == "User Authenticated") {
-      rt = "/dashboard";
-      return rt;
-    } else {
-      return rt;
-    }
-  };
   /*
   const register = () => {
     axios
@@ -83,11 +97,11 @@ export default function LoginBox(props) {
             </svg>
           </div>
           <form>
-            <div className="">
-              <label className="">Username</label>
+            <div>
+              <label>Username</label>
               <br></br>
               <input
-                className=""
+                className={usernameInputClass}
                 type="text"
                 placeholder="Enter Username"
                 id="uName"
@@ -96,9 +110,10 @@ export default function LoginBox(props) {
                 }}
               ></input>
             </div>
-            <div className="">
-              <label className="">Password</label>
+            <div>
+              <label>Password</label>
               <input
+                className={passwordInputClass}
                 id="uPass"
                 type="password"
                 placeholder="Enter Password"
@@ -108,13 +123,12 @@ export default function LoginBox(props) {
               ></input>
             </div>
 
-            <Link to={handleSession}>
-              <div id="loginBtn">
-                <button type="button" id="loginBtn" onClick={login}>
-                  Login
-                </button>
-              </div>
-            </Link>
+            <div id="loginBtn">
+              <button type="button" id="loginBtn" onClick={login}>
+                Login
+              </button>
+            </div>
+
             <div className="error-message">{loginStatus}</div>
           </form>
         </div>

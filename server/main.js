@@ -67,12 +67,19 @@ app.post("/login", async (req, res) => {
       console.log({ error: "Incorrect Username/Password" });
     } else {
       const accessToken = createToken(user);
-      res.cookie("access-token", accessToken, {
+
+      //uncomment below code to generate session using cookie
+      /*res.cookie("access-token", accessToken, {
         maxAge: 60 * 60 * 4,
+        domain: "http://localhost:3000",
+      });*/
+
+      res.status(200).json({
+        message: "User Authenticated",
+        token: accessToken,
+        username: user.username,
+        module_list: modGen(user.module_ids),
       });
-      res
-        .status(200)
-        .json({ error: "User Authenticated", message: "User Authenticated" });
       console.log({ message: "User Authenticated" });
     }
   });

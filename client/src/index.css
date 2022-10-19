@@ -103,6 +103,11 @@ select::selection {
   color: red;
 }
 
+.usernameInputClass,
+.passwordInputClass {
+  border-color: red !important;
+}
+
 #account-avt {
   width: 27px;
   height: 27px;
