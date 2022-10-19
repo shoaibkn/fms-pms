@@ -1,17 +1,10 @@
 import { useState, useEffect } from "react";
 import TableRowStatic from "../components/table-row-static";
 import TableHeader from "../components/table-header";
+import TableRow from "../components/table-row";
 export default function ComponentTest() {
-  const [addedMat, setAddMat] = useState([]);
-  useEffect(() => {
-    setAddMat([
-      { mat: "1", uom: "2", qty: "3" },
-      { mat: "1", uom: "2", qty: "3" },
-      { mat: "1", uom: "2", qty: "3" },
-    ]);
-    console.log(addedMat);
-  }, []);
-  let matList = addedMat;
+  const [materialList, setMaterialList] = useState([]);
+  useEffect(() => {});
   return (
     <>
       <div className="typematerialList">
@@ -21,9 +14,9 @@ export default function ComponentTest() {
         />
         <div className="material-rows">
           {
-            addedMat.map((mat, idx) => (
+            materialList.map((mat, idx) => (
               //console.log(idx);
-              <TableRowStatic
+              <TableRow
                 matName={mat.mat}
                 uom={mat.uom}
                 qty={mat.qty}

@@ -1,8 +1,15 @@
 import { Link } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 export default function HeaderNav(props) {
-  const { name, setName } = useState();
+  const [user, setUser] = useState("");
+  //setUser("aaaa");
+  useEffect(() => {
+    let uName = sessionStorage.getItem("username");
+    console.log(uName);
+    setUser(uName);
 
+    //fetch supplier list from database-2
+  }, []);
   return (
     <div className="header-navbar">
       <div id="hamburger-menu" onClick={showNav()}>
@@ -21,7 +28,7 @@ export default function HeaderNav(props) {
       </div>
 
       <div className="nav-data">
-        <h3>Welcome Admin</h3>
+        <h3>Welcome {user}</h3>
         <Link to="dashboard">
           <span>Dashboard</span>
         </Link>

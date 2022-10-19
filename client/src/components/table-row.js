@@ -6,7 +6,7 @@ export default function TableRow(props) {
     <div className="table-row">
       <p className="row-material">{props.matName}</p>
       <span className="row-uom">{props.uom}</span>
-      <InputBoxValue type={inuputType} />
+      <InputBoxValue type={inuputType} placeholder={props.placeholder} />
     </div>
   );
 }

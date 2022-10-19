@@ -35,7 +35,7 @@ export default function LoginBox(props) {
         //console.log(response.data.message);
         if (!response) {
           setLoginStatus(response.data.message);
-          console.log("NO response");
+          console.log("No response");
         } else {
           //console.log(response.data.message);
           setLoginStatus(response.data.message);

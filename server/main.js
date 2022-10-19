@@ -12,6 +12,10 @@ const db = require("./models");
 const models = require("./models");
 const Users = db.Users;
 const { createToken, validateToken } = require("./JWT");
+const {
+  fetchMaterialsfunc,
+  supplierListfunc,
+} = require("./middleware/bill_receive_apis");
 //app.use(express.static(path.join(__dirname, "build")));
 app.use(
   cors({
@@ -91,6 +95,21 @@ app.get("/profile", validateToken, (req, res) => {
   console.log(data.split("; "));
   res.json({ sessionStatus: true, mod_list: modGen(501) });
 });
+
+app.get("/bill_receive/supplier_list", async (req, res) => {
+  res.json(await supplierListfunc());
+  //console.log(await supplierListfunc());
+});
+
+app.post("/bill_receive/material_list", async (req, res) => {
+  const { supplierName, store_po } = req.body;
+  //console.log(supplierName);
+  //console.log(store_po);
+  const matData = await fetchMaterialsfunc(supplierName, store_po);
+  res.json(matData);
+  //console.log(matData);
+});
+
 const modGen = (mod_id) => {
   if (mod_id == 501) {
     return (mod_list = [
