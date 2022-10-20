@@ -27,7 +27,7 @@ export default function LoginBox(props) {
     //console.log(axios.post("http://localhost:3500/login", {username: usernameL,password: passwordL,}).value);
     //console.log(usernameL + " : " + passwordL);
     axios
-      .post("http://localhost:3500/login", {
+      .post("http://192.168.1.105:3500/login", {
         username: usernameL,
         password: passwordL,
       })

@@ -6,17 +6,18 @@ import TableHeader from "../components/table-header";
 import TableRow from "../components/table-row";
 import "../index.css";
 import axios from "axios";
-import { resolvePath } from "react-router-dom";
+import InputBoxValue from "../components/input-box-value";
 export default function BillReceive() {
   const [poStore, setPoStore] = useState("");
   const [supplierList, setSupplierList] = useState([]);
   const [materialList, setMaterialList] = useState([]);
+  const [image, setImage] = useState();
 
   //useEffect Hook to fetch supplier names
   useEffect(() => {
     //make api call to server to fetch all suppliers
     axios
-      .get("http://localhost:3500/bill_receive/supplier_list")
+      .get("http://192.168.1.105:3500/bill_receive/supplier_list")
       .then((response) => {
         if (!response) {
           alert("Critical Error No response Received!!");
@@ -26,19 +27,6 @@ export default function BillReceive() {
         }
       });
   }, []);
-  let td = [];
-  useEffect(() => {
-    materialList.forEach((m, i) =>
-      td.push(
-        <TableRow
-          matName={materialList[i][0]}
-          uom={materialList[i][1]}
-          type="number"
-          placeholder={materialList[i][2]}
-        />
-      )
-    );
-  }, [materialList]);
 
   let fetchMaterials = () => {
     let supplierName = document.getElementById("supName").value;
@@ -48,8 +36,8 @@ export default function BillReceive() {
         store_po: poStore,
       })
       .then((response) => {
+        setMaterialList(response.data[0]);
         console.log(response.data[0]);
-        //setMaterialList(response.data)
       });
   };
 
@@ -115,6 +103,17 @@ export default function BillReceive() {
     document.getElementById("poNum").value = "";
   };
 
+  let onImageChange = (event) => {
+    if (event.target.files && event.target.files[0]) {
+      let reader = new FileReader();
+      reader.onload = (e) => {
+        setImage(e.target.result);
+      };
+      reader.readAsDataURL(event.target.files[0]);
+    }
+  };
+
+  let submitBill = () => {};
   return (
     <div className="billScreen">
       <div>
@@ -176,18 +175,30 @@ export default function BillReceive() {
             heads={["Material", "UOM", "Qty"]}
             flexG={[{ flexGrow: 0.4 }, { flexGrow: 0 }, { flexGrow: 0 }]}
           />
-          <div className="material-rows">{td}</div>
+          <div className="material-rows">
+            {
+              materialList.map((mat, idx) => (
+                //console.log(idx);
+                <TableRow
+                  matName={mat.NOMEN1}
+                  uom={mat.UNIT_NM}
+                  qty={mat.BAL_QTY}
+                  key={idx}
+                />
+              ))
+              //<TableRowStatic matName={m.mat} uom={m.uom} qty={m.qty} />
+            }
+          </div>
+          <div className="billAmountInput">
+            <span>Enter Bill Amount</span>
+            <InputBoxValue />
+          </div>
         </div>
-        <Button
-          type="button"
-          id="uploadImage"
-          value="Upload Image"
-          onClickFunc={uploadImage}
-        />
+        <Button type="file" id="uploadImage" onChangeFunc={onImageChange} />
       </div>
 
       <div className="billImage">
-        <img className="billImageSRC"></img>
+        <img className="billImageSRC" alt="attached bill" src={image}></img>
         <Button
           type="button"
           id="submitBill"
@@ -198,21 +209,3 @@ export default function BillReceive() {
     </div>
   );
 }
-
-function submitBill() {
-  alert("Button CLicked");
-}
-
-function uploadImage() {}
-
-//function to fetch materials
-
-let genSupList = (data) => {
-  let supLi = [];
-  for (let i in data) {
-    let { SUPPLIER } = i;
-    //console.log(SUPPLIER);
-  }
-  //console.log(supLi);
-  return supLi;
-};

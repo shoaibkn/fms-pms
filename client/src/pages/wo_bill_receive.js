@@ -1,11 +1,45 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import Button from "../components/button";
 import Input from "../components/input";
+import InputBoxValue from "../components/input-box-value";
 import SelectInput from "../components/input-select";
 import TableHeader from "../components/table-header";
 import TableRow from "../components/table-row";
 export default function WOBillReceive() {
   const [poStore, setPoStore] = useState("");
+  const [supplierList, setSupplierList] = useState([]);
+  const [materialList, setMaterialList] = useState([]);
+  const [image, setImage] = useState();
+
+  useEffect(() => {
+    //make api call to server to fetch all suppliers
+    axios
+      .get("http://192.168.1.105:3500/bill_receive/supplier_list")
+      .then((response) => {
+        if (!response) {
+          alert("Critical Error No response Received!!");
+        } else {
+          setSupplierList(response.data);
+          //console.log(genSupList);
+        }
+      });
+  }, []);
+
+  let fetchMaterials = () => {
+    let supplierName = document.getElementById("supName").value;
+    axios
+      .post("/bill_receive/wo_material_list", {
+        supplierName: supplierName,
+        store_po: poStore,
+      })
+      .then((response) => {
+        console.log(response.data.rows);
+        setMaterialList(response.data.rows);
+        console.log(response.data.rows);
+      });
+  };
+
   const storeList = [
     "Grinderies",
     "Lasting",
@@ -34,7 +68,7 @@ export default function WOBillReceive() {
         st = "GS";
         break;
       case "Lasting":
-        st = "LA";
+        st = "LAS";
         break;
       case "Chemical":
         st = "CS";
@@ -43,7 +77,7 @@ export default function WOBillReceive() {
         st = "LS";
         break;
       case "General":
-        st = "GE";
+        st = "GES";
         break;
       case "Sample":
         st = "SS";
@@ -98,6 +132,16 @@ export default function WOBillReceive() {
     )
   );
 
+  let onImageChange = (event) => {
+    if (event.target.files && event.target.files[0]) {
+      let reader = new FileReader();
+      reader.onload = (e) => {
+        setImage(e.target.result);
+      };
+      reader.readAsDataURL(event.target.files[0]);
+    }
+  };
+
   return (
     <div className="billScreen">
       <div>
@@ -120,7 +164,7 @@ export default function WOBillReceive() {
               />
               <SelectInput
                 id="supName"
-                list={genSupList()}
+                list={supplierList}
                 name="Supplier Name"
               />
             </div>
@@ -152,18 +196,27 @@ export default function WOBillReceive() {
             heads={["Material", "UOM", "Qty"]}
             flexG={[{ flexGrow: 0.4 }, { flexGrow: 0 }, { flexGrow: 0 }]}
           />
-          <div className="material-rows">{td}</div>
+          <div className="material-rows">
+            {materialList.map((mat, idx) => (
+              //console.log(idx);
+              <TableRow
+                matName={mat.NOMEN1}
+                uom={mat.UNIT_NM}
+                qty={mat.BAL_QTY}
+                key={idx}
+              />
+            ))}
+          </div>
         </div>
-        <Button
-          type="button"
-          id="uploadImage"
-          value="Upload Materials"
-          onClickFunc={uploadImage}
-        />
+        <div className="billAmountInput">
+          <span>Enter Bill Amount</span>
+          <InputBoxValue />
+        </div>
+        <Button type="file" id="uploadImage" onChangeFunc={onImageChange} />
       </div>
 
       <div className="billImage">
-        <img className="billImageSRC"></img>
+        <img className="billImageSRC" src={image}></img>
         <Button
           type="button"
           id="submitBill"

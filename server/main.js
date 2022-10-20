@@ -11,15 +11,17 @@ const bcrypt = require("bcrypt");
 const db = require("./models");
 const models = require("./models");
 const Users = db.Users;
+const BillRecv = db.BillRecvModel;
 const { createToken, validateToken } = require("./JWT");
 const {
   fetchMaterialsfunc,
   supplierListfunc,
+  fetchMaterialsWOfunc,
 } = require("./middleware/bill_receive_apis");
 //app.use(express.static(path.join(__dirname, "build")));
 app.use(
   cors({
-    origin: ["http://localhost:3000"],
+    origin: ["http://192.168.1.105:3000"],
     methods: ["GET", "POST"],
     credentials: true,
   })
@@ -108,6 +110,23 @@ app.post("/bill_receive/material_list", async (req, res) => {
   const matData = await fetchMaterialsfunc(supplierName, store_po);
   res.json(matData);
   //console.log(matData);
+});
+
+app.post("/bill_receive/wo_material_list", async (req, res) => {
+  const { supplierName, store_po } = req.body;
+  //console.log(supplierName);
+  //console.log(store_po);
+  const matData = await fetchMaterialsWOfunc(supplierName, store_po);
+  res.json(matData);
+  //console.log(matData);
+});
+
+app.get("/bill_receive/lastID", async (req, res) => {
+  const ids = await BillRecv.findAll({
+    attributes: ["bill_id"],
+  });
+  console.log(ids);
+  res.send(ids);
 });
 
 const modGen = (mod_id) => {

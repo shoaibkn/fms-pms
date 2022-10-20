@@ -8,6 +8,7 @@ export default function Button(props) {
       id={props.id}
       value={props.value}
       onClick={props.onClickFunc}
+      onChange={props.onChangeFunc}
     ></input>
   );
 }

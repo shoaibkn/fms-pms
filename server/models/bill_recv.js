@@ -1,7 +1,5 @@
-const {
-  DataTypes
-} = require('sequelize');
-module.exports = sequelize => {
+const { DataTypes } = require("sequelize");
+module.exports = (sequelize) => {
   const attributes = {
     bill_id: {
       type: DataTypes.INTEGER,
@@ -13,8 +11,8 @@ module.exports = sequelize => {
       field: "bill_id",
       references: {
         key: "bill_id",
-        model: "store_tasks_model"
-      }
+        model: "store_tasks_model",
+      },
     },
     timestamp: {
       type: DataTypes.DATE,
@@ -23,7 +21,7 @@ module.exports = sequelize => {
       primaryKey: false,
       autoIncrement: false,
       comment: null,
-      field: "timestamp"
+      field: "timestamp",
     },
     bill_num: {
       type: DataTypes.INTEGER,
@@ -32,7 +30,7 @@ module.exports = sequelize => {
       primaryKey: false,
       autoIncrement: false,
       comment: null,
-      field: "bill_num"
+      field: "bill_num",
     },
     supplier_nm: {
       type: DataTypes.STRING(55),
@@ -41,7 +39,7 @@ module.exports = sequelize => {
       primaryKey: false,
       autoIncrement: false,
       comment: null,
-      field: "supplier_nm"
+      field: "supplier_nm",
     },
     bill_date: {
       type: DataTypes.DATEONLY,
@@ -50,7 +48,7 @@ module.exports = sequelize => {
       primaryKey: false,
       autoIncrement: false,
       comment: null,
-      field: "bill_date"
+      field: "bill_date",
     },
     bill_amt: {
       type: DataTypes.FLOAT,
@@ -59,14 +57,14 @@ module.exports = sequelize => {
       primaryKey: false,
       autoIncrement: false,
       comment: null,
-      field: "bill_amt"
-    }
+      field: "bill_amt",
+    },
   };
   const options = {
     tableName: "bill_recv",
     comment: "",
-    indexes: []
+    indexes: [],
   };
-  const BillRecvModel = sequelize.define("bill_recv_model", attributes, options);
+  const BillRecvModel = sequelize.define("BillRecvModel", attributes, options);
   return BillRecvModel;
 };
