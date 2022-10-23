@@ -1,21 +1,15 @@
 import React from "react";
 import { setUserSession } from "./utils/common";
-import {
-  BrowserRouter as Router,
-  Route,
-  Link,
-  Routes,
-  json,
-  useNavigate,
-} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useRef, useState, useEffect, useContext } from "react";
 import AuthContext from "../context/authProvider";
 import Dashboard from "./dashboard";
 import Cookies from "js-cookie";
-import axios from "axios";
-const LOGIN_URL = "/auth";
+import axios from "../api/axios";
+const LOGIN_URL = "/login";
 
 export default function LoginBox(props) {
+  const { setAuth } = useContext(AuthContext);
   const [usernameL, setUsername] = useState("");
   const [passwordL, setPassword] = useState("");
   const [loginStatus, setLoginStatus] = useState("");
@@ -27,14 +21,14 @@ export default function LoginBox(props) {
     //console.log(axios.post("http://localhost:3500/login", {username: usernameL,password: passwordL,}).value);
     //console.log(usernameL + " : " + passwordL);
     axios
-      .post("http://192.168.1.105:3500/login", {
+      .post(LOGIN_URL, {
         username: usernameL,
         password: passwordL,
       })
       .then((response) => {
-        //console.log(response.data.message);
+        console.log(response);
         if (!response) {
-          setLoginStatus(response.data.message);
+          setLoginStatus(response);
           console.log("No response");
         } else {
           //console.log(response.data.message);
@@ -51,10 +45,7 @@ export default function LoginBox(props) {
           } else if (response.data.message === "User Authenticated") {
             setUsernameInputClass("");
             setPasswordInputClass("");
-            setRedirect("/dashboard");
-            sessionStorage.setItem("access-token", response.data.token);
-            sessionStorage.setItem("username", response.data.username);
-            sessionStorage.setItem("module_list", response.data.module_list);
+            sessionStorage.setItem("access-token"); // -- will not execute navigate if cookie is not returned need try-catch block
             navigate("/dashboard");
           }
         }

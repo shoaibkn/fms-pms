@@ -1,12 +1,24 @@
 import { Link } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
+import AuthContext from "../context/authProvider";
+import axios from "../api/axios";
 export default function HeaderNav(props) {
   const [user, setUser] = useState("");
   //setUser("aaaa");
   useEffect(() => {
-    let uName = sessionStorage.getItem("username");
+    ///make api request to server to fetch username
+    axios.get("/profile").then((response) => {
+      //console.log(response);
+      if (!response) {
+        console.log("User Not Authorised");
+      } else {
+        setUser(response.username);
+      }
+    }, []);
+
+    /*let uName = sessionStorage.getItem("username");
     console.log(uName);
-    setUser(uName);
+    setUser(uName);*/
 
     //fetch supplier list from database-2
   }, []);

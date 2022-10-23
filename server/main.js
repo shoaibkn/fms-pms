@@ -19,9 +19,11 @@ const {
   fetchMaterialsWOfunc,
 } = require("./middleware/bill_receive_apis");
 //app.use(express.static(path.join(__dirname, "build")));
+
 app.use(
   cors({
-    origin: ["http://192.168.1.105:3000"],
+    "Access-Control-Allow-Origin": "*",
+    origin: "*",
     methods: ["GET", "POST"],
     credentials: true,
   })
@@ -33,7 +35,7 @@ app.use(cookieParser());
 
 app.get("/", (req, res) => {
   res.send("backend working");
-  console.log(res);
+  //console.log(res);
 });
 
 app.listen("3500", () => {
@@ -72,26 +74,32 @@ app.post("/login", async (req, res) => {
       });
       console.log({ error: "Incorrect Username/Password" });
     } else {
-      const accessToken = createToken(user);
-
-      //uncomment below code to generate session using cookie
-      /*res.cookie("access-token", accessToken, {
-        maxAge: 60 * 60 * 4,
-        domain: "http://localhost:3000",
-      });*/
-
-      res.status(200).json({
-        message: "User Authenticated",
-        token: accessToken,
+      const accessToken = createToken({
         username: user.username,
         module_list: modGen(user.module_ids),
       });
+
+      //uncomment below code to generate session using cookie
+      res.cookie("access-token", accessToken, {
+        message: "User Authenticated",
+        maxAge: 60 * 60 * 4,
+        domain: "http://192.168.1.105:3000",
+      });
+
+      res
+        .status(200)
+        .json({ token: accessToken, message: "User Authenticated" });
       console.log({ message: "User Authenticated" });
     }
   });
 });
 
-app.get("/profile", validateToken, (req, res) => {
+app.get("/profile", (req, res) => {
+  console.log(req.cookie);
+  //var data = req.headers.cookie;
+});
+
+app.get("/dashboard", validateToken, (req, res) => {
   var data = req.headers.cookie;
 
   console.log(data.split("; "));

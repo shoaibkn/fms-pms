@@ -24,21 +24,28 @@ function App() {
       <Routes>
         <Route path="/" element={<LoginBox />} />
         <Route path="dashboard" element={<Dashboard />} />
-        <Route path="dashboard/accounts_task" element={<AccountsTasks />} />
-        <Route path="dashboard/bill_issue_note" element={<BillIssueNote />} />
-        <Route path="dashboard/bill_receive" element={<BillReceive />} />
-        <Route path="dashboard/bill_recv_note" element={<BillRecvNote />} />
-        <Route path="dashboard/courier_in" element={<CourierIn />} />
-        <Route path="dashboard/courier_out" element={<CourierOut />} />
-        <Route path="dashboard/grn_tasks" element={<GRNTasks />} />
-        <Route path="dashboard/store_tasks" element={<StoreTasks />} />
-        <Route path="dashboard/wo_bill_receive" element={<WOBillReceive />} />
-        <Route path="componentTest" element={<ComponentTest />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>
   );
 }
+
+const protectedRoutes = () => {
+  return (
+    <BrowserRouter>
+      <Route path="dashboard/accounts_task" element={<AccountsTasks />} />
+      <Route path="dashboard/bill_issue_note" element={<BillIssueNote />} />
+      <Route path="dashboard/bill_receive" element={<BillReceive />} />
+      <Route path="dashboard/bill_recv_note" element={<BillRecvNote />} />
+      <Route path="dashboard/courier_in" element={<CourierIn />} />
+      <Route path="dashboard/courier_out" element={<CourierOut />} />
+      <Route path="dashboard/grn_tasks" element={<GRNTasks />} />
+      <Route path="dashboard/store_tasks" element={<StoreTasks />} />
+      <Route path="dashboard/wo_bill_receive" element={<WOBillReceive />} />
+      <Route path="componentTest" element={<ComponentTest />} />
+    </BrowserRouter>
+  );
+};
 
 export default App;
 //("<Dashboard mod_list={mod_names} />;");

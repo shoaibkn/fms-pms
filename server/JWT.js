@@ -19,6 +19,7 @@ const validateToken = (req, res, next) => {
     const validToken = verify(accessToken, secret);
     if (validToken) {
       req.authenticated = true;
+      console.log("-----------------------User Verified");
       return next();
     }
   } catch (err) {

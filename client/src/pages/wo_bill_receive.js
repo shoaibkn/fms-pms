@@ -15,7 +15,7 @@ export default function WOBillReceive() {
   useEffect(() => {
     //make api call to server to fetch all suppliers
     axios
-      .get("http://192.168.1.105:3500/bill_receive/supplier_list")
+      .get("http://localhost:3500/bill_receive/supplier_list")
       .then((response) => {
         if (!response) {
           alert("Critical Error No response Received!!");
