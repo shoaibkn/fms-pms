@@ -39,6 +39,24 @@ module.exports = sequelize => {
       autoIncrement: false,
       comment: null,
       field: "mail_body"
+    },
+    createdAt: {
+      type: DataTypes.DATE,
+      allowNull: true,
+      defaultValue: null,
+      primaryKey: false,
+      autoIncrement: false,
+      comment: null,
+      field: "createdAt"
+    },
+    modifiedAt: {
+      type: DataTypes.DATE,
+      allowNull: true,
+      defaultValue: null,
+      primaryKey: false,
+      autoIncrement: false,
+      comment: null,
+      field: "modifiedAt"
     }
   };
   const options = {

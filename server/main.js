@@ -10,7 +10,7 @@ const bcrypt = require("bcrypt");
 //const AuthnDbModel = require("./models/authn_db");
 const db = require("./models");
 const models = require("./models");
-const Users = db.Users;
+const AuthnDbModel = db.authn_db_model;
 const BillRecv = db.BillRecvModel;
 const { createToken, validateToken } = require("./JWT");
 const {
@@ -57,7 +57,7 @@ app.post("/register", (req, res) => {
 
 app.post("/login", async (req, res) => {
   const { username, password } = req.body;
-  const user = await Users.findOne({ where: { username: username } });
+  const user = await AuthnDbModel.findOne({ where: { username: username } });
 
   if (!user) {
     res.json({ error: "User not found", message: "User not found" });

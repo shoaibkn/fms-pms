@@ -3,14 +3,14 @@ const {
 } = require('sequelize');
 module.exports = sequelize => {
   const attributes = {
-    party_id: {
-      type: DataTypes.INTEGER,
+    merchant_uname: {
+      type: DataTypes.STRING(45),
       allowNull: false,
       defaultValue: null,
       primaryKey: false,
       autoIncrement: false,
       comment: null,
-      field: "party_id"
+      field: "merchant_uname"
     },
     merchant_nm: {
       type: DataTypes.STRING(155),
@@ -20,6 +20,33 @@ module.exports = sequelize => {
       autoIncrement: false,
       comment: null,
       field: "merchant_nm"
+    },
+    party_id: {
+      type: DataTypes.STRING(255),
+      allowNull: false,
+      defaultValue: null,
+      primaryKey: false,
+      autoIncrement: false,
+      comment: null,
+      field: "party_id"
+    },
+    createdAt: {
+      type: DataTypes.DATE,
+      allowNull: true,
+      defaultValue: null,
+      primaryKey: false,
+      autoIncrement: false,
+      comment: null,
+      field: "createdAt"
+    },
+    modifiedAt: {
+      type: DataTypes.DATE,
+      allowNull: true,
+      defaultValue: null,
+      primaryKey: false,
+      autoIncrement: false,
+      comment: null,
+      field: "modifiedAt"
     }
   };
   const options = {

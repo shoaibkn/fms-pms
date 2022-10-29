@@ -45,7 +45,7 @@ export default function LoginBox(props) {
           } else if (response.data.message === "User Authenticated") {
             setUsernameInputClass("");
             setPasswordInputClass("");
-            sessionStorage.setItem("access-token"); // -- will not execute navigate if cookie is not returned need try-catch block
+            //sessionStorage.setItem("access-token"); // -- will not execute navigate if cookie is not returned need try-catch block
             navigate("/dashboard");
           }
         }

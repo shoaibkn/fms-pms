@@ -37,12 +37,30 @@ module.exports = (sequelize) => {
       comment: null,
       field: "module_ids",
     },
+    createdAt: {
+      type: DataTypes.DATE,
+      allowNull: true,
+      defaultValue: null,
+      primaryKey: false,
+      autoIncrement: false,
+      comment: null,
+      field: "createdAt",
+    },
+    updatedAt: {
+      type: DataTypes.DATE,
+      allowNull: true,
+      defaultValue: null,
+      primaryKey: false,
+      autoIncrement: false,
+      comment: null,
+      field: "updatedAt",
+    },
   };
   const options = {
     tableName: "authn_db",
     comment: "",
     indexes: [],
   };
-  const Users = sequelize.define("Users", attributes, options);
-  return Users;
+  const AuthnDbModel = sequelize.define("authn_db_model", attributes, options);
+  return AuthnDbModel;
 };

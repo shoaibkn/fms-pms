@@ -29,7 +29,11 @@ module.exports = sequelize => {
       autoIncrement: false,
       comment: null,
       field: "bill_id",
-      unique: "unq_store_tasks_bill_id"
+      unique: "unq_store_tasks_bill_id",
+      references: {
+        key: "bill_id",
+        model: "bill_recv_model"
+      }
     },
     bt_id: {
       type: DataTypes.INTEGER,
@@ -67,6 +71,24 @@ module.exports = sequelize => {
       autoIncrement: false,
       comment: null,
       field: "qty_recv"
+    },
+    createdAt: {
+      type: DataTypes.DATE,
+      allowNull: true,
+      defaultValue: null,
+      primaryKey: false,
+      autoIncrement: false,
+      comment: null,
+      field: "createdAt"
+    },
+    modifiedAt: {
+      type: DataTypes.DATE,
+      allowNull: true,
+      defaultValue: null,
+      primaryKey: false,
+      autoIncrement: false,
+      comment: null,
+      field: "modifiedAt"
     }
   };
   const options = {
