@@ -443,6 +443,10 @@ label {
   align-items: center;
 }
 
+.row-selected {
+  border: solid #4476f7 2px;
+}
+
 #submitBill {
   width: fit-content;
 }

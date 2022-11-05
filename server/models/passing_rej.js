@@ -20,7 +20,11 @@ module.exports = sequelize => {
       autoIncrement: false,
       comment: null,
       field: "bm_id",
-      unique: "unq_material_quality_feedback_bm_id_0"
+      unique: "unq_material_quality_feedback_bm_id_0",
+      references: {
+        key: "bm_id",
+        model: "bill_receive_dtl_model"
+      }
     },
     pi_num: {
       type: DataTypes.INTEGER,

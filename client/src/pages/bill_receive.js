@@ -7,6 +7,7 @@ import TableRow from "../components/table-row";
 import "../index.css";
 import axios from "axios";
 import InputBoxValue from "../components/input-box-value";
+const ipL = "http://192.168.1.105:3500"; //change to gloabl IP address in production
 export default function BillReceive() {
   const [poStore, setPoStore] = useState("");
   const [supplierList, setSupplierList] = useState([]);
@@ -16,29 +17,45 @@ export default function BillReceive() {
   //useEffect Hook to fetch supplier names
   useEffect(() => {
     //make api call to server to fetch all suppliers
-    axios
-      .get("http://localhost:3500/bill_receive/supplier_list")
-      .then((response) => {
-        if (!response) {
-          alert("Critical Error No response Received!!");
-        } else {
-          setSupplierList(response.data);
-          //console.log(genSupList);
-        }
-      });
+    axios.get(ipL + "/bill_receive/supplier_list").then((response) => {
+      if (!response) {
+        alert("Critical Error No response Received!!");
+      } else {
+        setSupplierList(response.data);
+        //console.log(genSupList);
+      }
+    });
   }, []);
 
   let fetchMaterials = () => {
     let supplierName = document.getElementById("supName").value;
-    axios
-      .post("/bill_receive/material_list", {
-        supplierName: supplierName,
-        store_po: poStore,
-      })
-      .then((response) => {
-        setMaterialList(response.data[0]);
-        console.log(response.data[0]);
-      });
+    if (
+      supplierName === "default-val" ||
+      supplierName === undefined ||
+      poStore === undefined ||
+      poStore === ""
+    ) {
+      alert("Incomplete Details Selected");
+      return 0;
+    }
+    try {
+      axios
+        .post(ipL + "/bill_receive/material_list", {
+          supplierName: supplierName,
+          store_po: poStore,
+        })
+        .then((response) => {
+          if (response.data === "Materials not Found") {
+            alert("No Materials Found");
+          } else {
+            console.log(response.data);
+            setMaterialList(response.data[0]);
+          }
+          //console.log(response.data[0]);
+        });
+    } catch (error) {
+      //console.log(error);
+    }
   };
 
   const storeList = [
@@ -48,6 +65,7 @@ export default function BillReceive() {
     "Sample",
     "Leather",
     "General",
+    "Packing",
   ];
   let addPO = () => {
     let storename = document.getElementById("storeName").value;
@@ -70,6 +88,9 @@ export default function BillReceive() {
         break;
       case "Sample":
         st = "SS";
+        break;
+      case "Packing":
+        st = "PAS";
         break;
       default:
         st = "";
@@ -103,6 +124,18 @@ export default function BillReceive() {
     document.getElementById("poNum").value = "";
   };
 
+  let onImgBtnClick = () => {
+    if (
+      document.getElementById("supName").value === "default-val" ||
+      document.getElementById("supName") === "" ||
+      document.getElementById("billNum").value === "" ||
+      document.getElementById("billNum").value === undefined
+    ) {
+      alert("Select Supplier and Bill Number First");
+      return 0;
+    }
+  };
+
   let onImageChange = (event) => {
     if (event.target.files && event.target.files[0]) {
       let reader = new FileReader();
@@ -113,7 +146,100 @@ export default function BillReceive() {
     }
   };
 
-  let submitBill = () => {};
+  let submitBill = () => {
+    let detailsPr = [
+      {
+        bill_num: document.getElementById("billNum").value,
+        sup_name: document.getElementById("supName").value,
+        bill_date: document.getElementById("billDate").value,
+        bill_amt: document.getElementById("bill_amt").value,
+      },
+    ];
+
+    if (
+      detailsPr.bill_num === "" ||
+      detailsPr.sup_name === "" ||
+      detailsPr.bill_date === "" ||
+      detailsPr.bill_amt === ""
+    ) {
+      alert("Details Incomplete");
+      return 0;
+    }
+
+    console.log(detailsPr);
+    let store_po_arr = poStore.split(";");
+    let poArr = [];
+    let storeArr = [];
+    let uniStoreArr = [];
+    let uniPoArr = [];
+
+    store_po_arr.forEach((store_po) => {
+      storeArr.push(store_po.split("_")[0].trim());
+      poArr.push(store_po.split("_")[1].trim());
+    });
+    uniStoreArr = removeDuplicates(storeArr);
+    uniPoArr = removeDuplicates(poArr);
+    console.log(uniStoreArr);
+    console.log(uniPoArr);
+    let detailsSe = [];
+
+    let selRows = document.getElementsByClassName("row-selected");
+
+    console.log(detailsSe);
+    if (uniStoreArr.length === 1) {
+      //execute first condition
+      console.log("Only one store present");
+      for (let mat of selRows) {
+        detailsSe.push({
+          store_id: uniStoreArr.toString(),
+          po_num: uniPoArr.toString(),
+          materialName: mat.children[0].innerHTML,
+          uom: mat.children[1].innerHTML,
+          qty: mat.children[2].value,
+        });
+      }
+    } else if (uniStoreArr > 1) {
+      //execute second condition
+      console.log("multiple stores present");
+      for (let mat of selRows) {
+        detailsSe.push({
+          store_id: uniStoreArr.toString(),
+          po_num: uniPoArr.toString(),
+          materialName: mat.children[0].innerHTML,
+          uom: mat.children[1].innerHTML,
+          qty: mat.children[2].value,
+        });
+      }
+    }
+
+    axios
+      .post(ipL + "/bill_receive/updateBill", {
+        billArr: detailsPr,
+        billDtlArr: detailsSe,
+        multStore: false,
+      })
+      .then((response) => {
+        alert(response.data.message);
+        if (response.data.message === "Records Updated") {
+          clearPage();
+        }
+      });
+
+    function removeDuplicates(arr) {
+      return [...new Set(arr)];
+    }
+  };
+
+  function clearPage() {
+    setPoStore("");
+    setMaterialList([]);
+    setImage("");
+    document.getElementById("billNum").value = "";
+    document.getElementById("supName").value = "";
+    document.getElementById("billDate").value = "";
+    document.getElementById("bill_amt").value = "";
+  }
+
   return (
     <div className="billScreen">
       <div>
@@ -126,6 +252,7 @@ export default function BillReceive() {
                 for="date"
                 type="date"
                 placeholder="dd/mm/yyyy"
+                id="billDate"
               />
               <Input
                 name="Bill Number"
@@ -184,6 +311,7 @@ export default function BillReceive() {
                   uom={mat.UNIT_NM}
                   qty={mat.BAL_QTY}
                   key={idx}
+                  id={"r-" + idx}
                 />
               ))
               //<TableRowStatic matName={m.mat} uom={m.uom} qty={m.qty} />
@@ -191,10 +319,15 @@ export default function BillReceive() {
           </div>
           <div className="billAmountInput">
             <span>Enter Bill Amount</span>
-            <InputBoxValue />
+            <InputBoxValue id={"bill_amt"} />
           </div>
         </div>
-        <Button type="file" id="uploadImage" onChangeFunc={onImageChange} />
+        <Button
+          type="file"
+          id="uploadImage"
+          onChangeFunc={onImageChange}
+          onClickFunc={onImgBtnClick}
+        />
       </div>
 
       <div className="billImage">

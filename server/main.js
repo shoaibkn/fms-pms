@@ -9,7 +9,7 @@ const session = require("express-session");
 const bcrypt = require("bcrypt");
 //const AuthnDbModel = require("./models/authn_db");
 const db = require("./models");
-const models = require("./models");
+//const models = require("./models");
 const AuthnDbModel = db.authn_db_model;
 const BillRecv = db.BillRecvModel;
 const { createToken, validateToken } = require("./JWT");
@@ -17,6 +17,7 @@ const {
   fetchMaterialsfunc,
   supplierListfunc,
   fetchMaterialsWOfunc,
+  BillUpdate,
 } = require("./middleware/bill_receive_apis");
 //app.use(express.static(path.join(__dirname, "build")));
 
@@ -116,7 +117,12 @@ app.post("/bill_receive/material_list", async (req, res) => {
   //console.log(supplierName);
   //console.log(store_po);
   const matData = await fetchMaterialsfunc(supplierName, store_po);
-  res.json(matData);
+  if (matData.message === "Materials not Found" || matData.message === [[]]) {
+    res.json(matData.message);
+    //console.log(matData);
+  } else {
+    res.json(matData);
+  }
   //console.log(matData);
 });
 
@@ -165,6 +171,17 @@ const modGen = (mod_id) => {
   }
   //return status accepted and an array of all user modules
 };
+
+app.post("/bill_receive/updateBill", async (req, res) => {
+  const { billArr, billDtlArr, multStore } = req.body;
+  let update = await BillUpdate(req);
+  console.log(update.message);
+  if (update.message === "success") {
+    return res.status(200).json({ message: "Records Updated" });
+  } else {
+    return res.status(400).json({ message: update.message });
+  }
+});
 
 db.sequelize.sync().then(() => {
   app.listen(3501, () => {

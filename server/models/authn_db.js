@@ -1,5 +1,7 @@
-const { DataTypes } = require("sequelize");
-module.exports = (sequelize) => {
+const {
+  DataTypes
+} = require('sequelize');
+module.exports = sequelize => {
   const attributes = {
     uid: {
       type: DataTypes.INTEGER,
@@ -8,7 +10,7 @@ module.exports = (sequelize) => {
       primaryKey: true,
       autoIncrement: true,
       comment: null,
-      field: "uid",
+      field: "uid"
     },
     username: {
       type: DataTypes.STRING(100),
@@ -17,7 +19,7 @@ module.exports = (sequelize) => {
       primaryKey: false,
       autoIncrement: false,
       comment: null,
-      field: "username",
+      field: "username"
     },
     passwd: {
       type: DataTypes.STRING(255),
@@ -26,7 +28,7 @@ module.exports = (sequelize) => {
       primaryKey: false,
       autoIncrement: false,
       comment: null,
-      field: "passwd",
+      field: "passwd"
     },
     module_ids: {
       type: DataTypes.STRING(255),
@@ -35,7 +37,7 @@ module.exports = (sequelize) => {
       primaryKey: false,
       autoIncrement: false,
       comment: null,
-      field: "module_ids",
+      field: "module_ids"
     },
     createdAt: {
       type: DataTypes.DATE,
@@ -44,7 +46,7 @@ module.exports = (sequelize) => {
       primaryKey: false,
       autoIncrement: false,
       comment: null,
-      field: "createdAt",
+      field: "createdAt"
     },
     updatedAt: {
       type: DataTypes.DATE,
@@ -53,13 +55,13 @@ module.exports = (sequelize) => {
       primaryKey: false,
       autoIncrement: false,
       comment: null,
-      field: "updatedAt",
-    },
+      field: "updatedAt"
+    }
   };
   const options = {
     tableName: "authn_db",
     comment: "",
-    indexes: [],
+    indexes: []
   };
   const AuthnDbModel = sequelize.define("authn_db_model", attributes, options);
   return AuthnDbModel;

@@ -1,7 +1,5 @@
-const {
-  DataTypes
-} = require('sequelize');
-module.exports = sequelize => {
+const { DataTypes } = require("sequelize");
+module.exports = (sequelize) => {
   const attributes = {
     bm_id: {
       type: DataTypes.INTEGER,
@@ -11,10 +9,6 @@ module.exports = sequelize => {
       autoIncrement: true,
       comment: null,
       field: "bm_id",
-      references: {
-        key: "bm_id",
-        model: "passing_rej_model"
-      }
     },
     bill_id: {
       type: DataTypes.INTEGER,
@@ -24,38 +18,37 @@ module.exports = sequelize => {
       autoIncrement: false,
       comment: null,
       field: "bill_id",
-      unique: "unq_bill_receive_dtl_bill_id",
       references: {
         key: "bill_id",
-        model: "bill_recv_model"
-      }
+        model: "bill_recv_model",
+      },
     },
     store_id: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      defaultValue: null,
-      primaryKey: false,
-      autoIncrement: false,
-      comment: null,
-      field: "store_id"
-    },
-    po_num: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      defaultValue: null,
-      primaryKey: false,
-      autoIncrement: false,
-      comment: null,
-      field: "po_num"
-    },
-    store_po: {
       type: DataTypes.STRING(150),
       allowNull: false,
       defaultValue: null,
       primaryKey: false,
       autoIncrement: false,
       comment: null,
-      field: "store_po"
+      field: "store_id",
+    },
+    po_num: {
+      type: DataTypes.STRING(150),
+      allowNull: false,
+      defaultValue: null,
+      primaryKey: false,
+      autoIncrement: false,
+      comment: null,
+      field: "po_num",
+    },
+    store_po: {
+      type: DataTypes.STRING(150),
+      allowNull: true,
+      defaultValue: null,
+      primaryKey: false,
+      autoIncrement: false,
+      comment: null,
+      field: "store_po",
     },
     material_nm: {
       type: DataTypes.STRING(255),
@@ -64,7 +57,7 @@ module.exports = sequelize => {
       primaryKey: false,
       autoIncrement: false,
       comment: null,
-      field: "material_nm"
+      field: "material_nm",
     },
     uom: {
       type: DataTypes.STRING(12),
@@ -73,7 +66,7 @@ module.exports = sequelize => {
       primaryKey: false,
       autoIncrement: false,
       comment: null,
-      field: "uom"
+      field: "uom",
     },
     qty: {
       type: DataTypes.FLOAT,
@@ -82,7 +75,7 @@ module.exports = sequelize => {
       primaryKey: false,
       autoIncrement: false,
       comment: null,
-      field: "qty"
+      field: "qty",
     },
     createdAt: {
       type: DataTypes.DATE,
@@ -91,23 +84,34 @@ module.exports = sequelize => {
       primaryKey: false,
       autoIncrement: false,
       comment: null,
-      field: "createdAt"
+      field: "createdAt",
     },
-    modifiedAt: {
+    updatedAt: {
       type: DataTypes.DATE,
       allowNull: true,
       defaultValue: null,
       primaryKey: false,
       autoIncrement: false,
       comment: null,
-      field: "modifiedAt"
-    }
+      field: "modifiedat",
+    },
   };
   const options = {
     tableName: "bill_receive_dtl",
     comment: "",
-    indexes: []
+    indexes: [
+      {
+        name: "fk_bill_receive_dtl_bill_recv",
+        unique: false,
+        type: "BTREE",
+        fields: ["bill_id"],
+      },
+    ],
   };
-  const BillReceiveDtlModel = sequelize.define("bill_receive_dtl_model", attributes, options);
+  const BillReceiveDtlModel = sequelize.define(
+    "bill_receive_dtl_model",
+    attributes,
+    options
+  );
   return BillReceiveDtlModel;
 };

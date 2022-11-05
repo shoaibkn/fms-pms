@@ -1,5 +1,10 @@
 const oracledb = require("oracledb");
 const { format } = require("path");
+const db = require("../models");
+//const models = require("../models");
+const BillRecv = db.bill_recv_model;
+const BillRecvDtl = db.bill_receive_dtl_model;
+
 let sql, binds, options;
 
 async function supplierListfunc() {
@@ -10,7 +15,7 @@ async function supplierListfunc() {
       connection = await oracledb.getConnection({
         user: "shoetech",
         password: "temppass",
-        connectString: "192.168.1.43/ORCL",
+        connectString: "192.168.1.43/ORCL", //change IP to global in production
       });
     } catch (error) {
       console.log("Cannot create Connection with Database");
@@ -38,6 +43,7 @@ async function supplierListfunc() {
 }
 
 const fetchMaterialsfunc = async (supplierName, store_po) => {
+  //console.log(store_po);
   let mArr = [];
   let finalArr = [];
   let stateData;
@@ -51,11 +57,14 @@ const fetchMaterialsfunc = async (supplierName, store_po) => {
   let laPO = [];
   let psPO = [];
   let ssPO = [];
+  //console.log(poList.length);
+  let st = [];
+  let po = [];
 
   for (let st_po of poList) {
-    let st = st_po.split("_")[0];
-    //console.log(st);
-    let po = st_po.split("_")[1];
+    st = st_po.split("_")[0].trim();
+    console.log(st);
+    po = st_po.split("_")[1].trim();
     //console.log(po);
 
     switch (st) {
@@ -83,6 +92,9 @@ const fetchMaterialsfunc = async (supplierName, store_po) => {
       default:
         "";
     }
+    st = [];
+    po = [];
+    console.log(gsPO);
   }
 
   if (gsPO != "") {
@@ -121,6 +133,8 @@ const fetchMaterialsfunc = async (supplierName, store_po) => {
       console.log("Cannot create Connection with Database");
       console.log(error);
     }
+
+    console.log(mArr);
     for (let poD of mArr) {
       sql =
         "SELECT DISTINCT SMI_PO_DTL.NOMEN1, SM_UNIT.UNIT_NM, SUM(SMI_PO_DTL.QTY - SMI_PO_DTL.QTY_RECV) AS BAL_QTY FROM SMI_PO_DTL INNER JOIN SMI_PO ON SMI_PO.PO_NO = SMI_PO_DTL.PO_NO AND SMI_PO.FIN_YEAR = SMI_PO_DTL.FIN_YEAR AND SMI_PO.STORE_CD = SMI_PO_DTL.STORE_CD JOIN SM_SUPPLIERS ON SMI_PO.PARTY_CD = SM_SUPPLIERS.SUPP_ID JOIN SM_UNIT ON SMI_PO_DTL.UNIT_ID = SM_UNIT.UNIT_ID LEFT JOIN SMI_PO_SUBDTL ON SMI_PO_DTL.PO_NO = SMI_PO_SUBDTL.PO_NO AND SMI_PO_DTL.FIN_YEAR = SMI_PO_SUBDTL.YCODE AND SMI_PO_DTL.MAT_ID = SMI_PO_SUBDTL.MAT_ID LEFT JOIN SMS_ORDER_DTL ON SMS_ORDER_DTL.PROD_ORDER_NO = SMI_PO_SUBDTL.OS_NO WHERE SMI_PO.FIN_YEAR = '22-23' AND SMI_PO_DTL.STORE_CD = " +
@@ -148,11 +162,17 @@ const fetchMaterialsfunc = async (supplierName, store_po) => {
       finalArr.push(result.rows);
     }
   } catch (error) {
-    //console.log(error);
+    console.log("Cannot create Connection with Database");
+    console.log(error);
+  }
+  if (finalArr[0].length === 0) {
+    console.log({ message: "Materials not Found" });
+    return { message: "Materials not Found" };
   }
   let matList = [];
   //for(let i = 0; i <finalArr.length(); i++)
-
+  //console.log(finalArr);
+  console.log(finalArr[0].length);
   return finalArr;
   //console.log(finalArr);
 };
@@ -197,18 +217,99 @@ const fetchMaterialsWOfunc = async (supplierName, store_po) => {
     };
     console.log(sql);
     result = await connection.execute(sql, binds, options);
-
-    //console.log("Metadata : ");
-    //console.dir(result.metaData, { depth: null });
-    //console.log("Result : ");
-    //console.dir(result.rows, { depth: null });
   } catch (error) {
-    //console.log(error);
+    return { message: "Materials not Found" };
   }
+  if (result === [[]]) {
+    //console.log({ message: "Materials not Found" });
+    return { message: "Materials not Found" };
+  }
+
   let matList = [];
-  //for(let i = 0; i <finalArr.length(); i++)
 
   return result;
 };
 
-module.exports = { supplierListfunc, fetchMaterialsfunc, fetchMaterialsWOfunc };
+const BillUpdate = async (req, res, next) => {
+  const { billArr, billDtlArr, multStore } = req.body;
+  /*billArr = [
+    {
+      bill_num: 1109,
+      sup_name: "VERSATILE OPERATION",
+      bill_date: "2022-11-01",
+      bill_amt: 122200.0,
+    },
+  ];
+  billDtlArr = [
+    {
+      store_id: "LAS",
+      po_num: "913,812",
+      materialName: "SOLE VENUS TPR TAN :(TAN )",
+      uom: "PAIR",
+      qty: "33",
+    },
+    {
+      store_id: "LAS",
+      po_num: "913,812",
+      materialName: "SOLE MODARE TPR TAN :(TAN )",
+      uom: "PAIR",
+      qty: "24",
+    },
+    {
+      store_id: "LAS",
+      po_num: "913,812",
+      materialName: "SOLE VENUS TPR BLACK :(BLACK )",
+      uom: "PAIR",
+      qty: "11",
+    },
+    {
+      store_id: "LAS",
+      po_num: "913,812",
+      materialName: "SOLE HNX TPR TRANSPARENT :(TRANSPARENT )",
+      uom: "PAIR",
+      qty: "1132",
+    },
+  ];*/
+
+  try {
+    let billrecvUpdate = await BillRecv.create({
+      timestamp: Date.now(),
+      bill_num: billArr[0].bill_num,
+      bill_date: billArr[0].bill_date,
+      supplier_nm: billArr[0].sup_name,
+      bill_amt: billArr[0].bill_amt,
+    });
+
+    console.log(billrecvUpdate.bill_id);
+
+    try {
+      if (multStore == false) {
+        for (let mat of billDtlArr) {
+          await BillRecvDtl.create({
+            bill_id: billrecvUpdate.bill_id,
+            store_id: mat.store_id,
+            po_num: mat.po_num,
+            material_nm: mat.materialName,
+            uom: mat.uom,
+            qty: mat.qty,
+          });
+        }
+      }
+    } catch (error) {
+      await BillRecv.destroy({ where: { bill_id: billrecvUpdate.bill_id } });
+      return {
+        message: "Something went wrong the changes have been rolled back...",
+      };
+    }
+  } catch (error) {
+    return { message: error };
+  }
+  return { message: "success" };
+};
+
+module.exports = {
+  supplierListfunc,
+  fetchMaterialsfunc,
+  fetchMaterialsWOfunc,
+  BillUpdate,
+};
