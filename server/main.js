@@ -7,6 +7,20 @@ const bp = require("body-parser");
 const cookieParser = require("cookie-parser");
 const session = require("express-session");
 const bcrypt = require("bcrypt");
+const multer = require("multer");
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, "./Images");
+    console.log("Destination set");
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.originalname);
+    console.log("fileName set");
+  },
+});
+const upload = multer({ dest: "./Images" });
+
+// const upload = multer({storage:})
 //const AuthnDbModel = require("./models/authn_db");
 const db = require("./models");
 //const models = require("./models");
@@ -19,6 +33,7 @@ const {
   fetchMaterialsWOfunc,
   BillUpdate,
 } = require("./middleware/bill_receive_apis");
+const { createBrotliCompress } = require("zlib");
 //app.use(express.static(path.join(__dirname, "build")));
 
 app.use(
@@ -30,7 +45,7 @@ app.use(
   })
 );
 
-app.use(bp.json());
+app.use(bp.json({ limit: "50mb" }));
 app.use(bp.urlencoded({ extended: true }));
 app.use(cookieParser());
 
@@ -182,6 +197,34 @@ app.post("/bill_receive/updateBill", async (req, res) => {
     return res.status(400).json({ message: update.message });
   }
 });
+
+app.post(
+  "/bill_receive/uploadImage",
+  upload.single("bill_image"),
+  async (req, res, next) => {
+    /*
+
+    /**
+   * upload(req, res, (err) => {
+    if (err) {
+      res.status(400).json({ message: "Something went wrong" });
+      return 0;
+    }
+    console.log({ message: "Image Uploaded" });
+    res.send(req.file);
+    //res.json({ message: "File Uploaded" });
+  });
+   */
+    /*const file = req.file;
+    console.log(file.filename);
+    if (!file) {
+      const error = new Error("no File");
+      error.httpStatusCode = 400;
+      return next(error);
+    }
+    res.send(file);*/
+  }
+);
 
 db.sequelize.sync().then(() => {
   app.listen(3501, () => {
