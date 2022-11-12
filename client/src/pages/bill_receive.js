@@ -13,6 +13,8 @@ export default function BillReceive() {
   const [supplierList, setSupplierList] = useState([]);
   const [materialList, setMaterialList] = useState([]);
   const [image, setImage] = useState();
+  const [imageName, setImageName] = useState([]);
+  const [fileUploadClass, setFileUploadClass] = useState("class-hidden");
 
   //useEffect Hook to fetch supplier names
   useEffect(() => {
@@ -26,6 +28,23 @@ export default function BillReceive() {
       }
     });
   }, []);
+
+  let fileUploadBtnStatus = () => {
+    let supplierName = document.getElementById("supName").value;
+    let billNum = document.getElementById("billNum").value;
+    if (
+      !(
+        supplierName === undefined ||
+        supplierName === "default-val" ||
+        supplierName === ""
+      ) &&
+      !(billNum === undefined || billNum === "")
+    ) {
+      setFileUploadClass("");
+    } else {
+      setFileUploadClass("class-hidden");
+    }
+  };
 
   let fetchMaterials = () => {
     let supplierName = document.getElementById("supName").value;
@@ -143,6 +162,7 @@ export default function BillReceive() {
         setImage(e.target.result);
       };
       reader.readAsDataURL(event.target.files[0]);
+      console.log(image);
     }
   };
 
@@ -221,15 +241,24 @@ export default function BillReceive() {
       .then((response) => {
         alert(response.data.message);
         if (response.data.message === "Records Updated") {
-          clearPage();
+          //clearPage();
         }
       });
+
+    const data = new FormData();
+    data.append("bill_image", image);
+    axios.post("/bill_receive/uploadImage", data).then((response) => {
+      console.log(data);
+      //console.log(response.file);
+    });
 
     function removeDuplicates(arr) {
       return [...new Set(arr)];
     }
-  };
 
+    //clearPage();
+  };
+  /*
   function clearPage() {
     setPoStore("");
     setMaterialList([]);
@@ -239,96 +268,103 @@ export default function BillReceive() {
     document.getElementById("billDate").value = "";
     document.getElementById("bill_amt").value = "";
   }
-
+*/
   return (
     <div className="billScreen">
-      <div>
-        <div className="initEntry">
-          <div className="screen-header">Bill Receive Form</div>
-          <div>
-            <div className="form-group-1">
-              <Input
-                name="Date"
-                for="date"
-                type="date"
-                placeholder="dd/mm/yyyy"
-                id="billDate"
-              />
-              <Input
-                name="Bill Number"
-                for="number"
-                type="number"
-                placeholder="Bill Number"
-                id="billNum"
-              />
-              <SelectInput
-                id="supName"
-                list={supplierList}
-                name="Supplier Name"
-              />
+      <form>
+        <div>
+          <div className="initEntry">
+            <div className="screen-header">Bill Receive Form</div>
+            <div>
+              <div className="form-group-1" onChange={fileUploadBtnStatus}>
+                <Input
+                  name="Date"
+                  for="date"
+                  type="date"
+                  placeholder="dd/mm/yyyy"
+                  id="billDate"
+                />
+                <Input
+                  name="Bill Number"
+                  for="number"
+                  type="number"
+                  placeholder="Bill Number"
+                  id="billNum"
+                />
+                <SelectInput
+                  id="supName"
+                  list={supplierList}
+                  name="Supplier Name"
+                />
+              </div>
+              <div className="form-group-2">
+                <SelectInput
+                  id="storeName"
+                  list={storeList}
+                  name="Store Name"
+                />
+                <Input
+                  id="poNum"
+                  name="PO Number"
+                  for="po-number"
+                  type="number"
+                  placeholder="Enter PO"
+                />
+                <Button
+                  type="button"
+                  id="poAddButton"
+                  value="Add"
+                  onClickFunc={addPO}
+                />
+              </div>
             </div>
-            <div className="form-group-2">
-              <SelectInput id="storeName" list={storeList} name="Store Name" />
-              <Input
-                id="poNum"
-                name="PO Number"
-                for="po-number"
-                type="number"
-                placeholder="Enter PO"
-              />
+            <div className="form-group-3">
+              <div>
+                <h3>Selected POs</h3>
+                <p id={"sel-po"}>{poStore}</p>
+              </div>
               <Button
                 type="button"
-                id="poAddButton"
-                value="Add"
-                onClickFunc={addPO}
+                id="fetchMaterialBtn"
+                value="Fetch Materials"
+                onClickFunc={fetchMaterials}
               />
             </div>
           </div>
-          <div className="form-group-3">
-            <div>
-              <h3>Selected POs</h3>
-              <p id={"sel-po"}>{poStore}</p>
-            </div>
-            <Button
-              type="button"
-              id="fetchMaterialBtn"
-              value="Fetch Materials"
-              onClickFunc={fetchMaterials}
+          <div className="typematerialList">
+            <TableHeader
+              heads={["Material", "UOM", "Qty"]}
+              flexG={[{ flexGrow: 0.4 }, { flexGrow: 0 }, { flexGrow: 0 }]}
             />
+            <div className="material-rows">
+              {
+                materialList.map((mat, idx) => (
+                  //console.log(idx);
+                  <TableRow
+                    matName={mat.NOMEN1}
+                    uom={mat.UNIT_NM}
+                    qty={mat.BAL_QTY}
+                    key={idx}
+                    id={"r-" + idx}
+                  />
+                ))
+                //<TableRowStatic matName={m.mat} uom={m.uom} qty={m.qty} />
+              }
+            </div>
+            <div className="billAmountInput">
+              <span>Enter Bill Amount</span>
+              <InputBoxValue id={"bill_amt"} />
+            </div>
           </div>
-        </div>
-        <div className="typematerialList">
-          <TableHeader
-            heads={["Material", "UOM", "Qty"]}
-            flexG={[{ flexGrow: 0.4 }, { flexGrow: 0 }, { flexGrow: 0 }]}
+          <Button
+            class={fileUploadClass}
+            type="file"
+            id="uploadImage"
+            onChangeFunc={onImageChange}
+            onClickFunc={onImgBtnClick}
           />
-          <div className="material-rows">
-            {
-              materialList.map((mat, idx) => (
-                //console.log(idx);
-                <TableRow
-                  matName={mat.NOMEN1}
-                  uom={mat.UNIT_NM}
-                  qty={mat.BAL_QTY}
-                  key={idx}
-                  id={"r-" + idx}
-                />
-              ))
-              //<TableRowStatic matName={m.mat} uom={m.uom} qty={m.qty} />
-            }
-          </div>
-          <div className="billAmountInput">
-            <span>Enter Bill Amount</span>
-            <InputBoxValue id={"bill_amt"} />
-          </div>
         </div>
-        <Button
-          type="file"
-          id="uploadImage"
-          onChangeFunc={onImageChange}
-          onClickFunc={onImgBtnClick}
-        />
-      </div>
+      </form>
 
       <div className="billImage">
         <img className="billImageSRC" alt="attached bill" src={image}></img>
