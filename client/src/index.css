@@ -9,7 +9,9 @@
 .class-hidden {
   display: none !important;
 }
-
+#newSenderInput {
+  margin-bottom: 20px;
+}
 input,
 select {
   display: flex;
@@ -252,6 +254,7 @@ a {
   display: flex;
   flex-direction: row;
   align-items: flex-start;
+  max-width: 300px;
   padding: 8px 0px 8px 14px;
   gap: 10px;
 }
@@ -264,7 +267,7 @@ input::placeholder {
 input[type="file"] {
   display: none;
 }
-button,
+
 input[type="button"],
 input[type="submit"],
 input[type="file"] {
@@ -377,6 +380,7 @@ label {
   flex-direction: row;
   flex-wrap: nowrap;
   justify-content: space-between;
+  align-items: center;
   padding: 10px 20px;
   height: auto;
   background: #d9d9d9;
@@ -387,6 +391,11 @@ label {
   font-size: 12px;
   line-height: 18px;
   margin-bottom: 6px;
+}
+
+.table-row > p,
+.table-row > span {
+  margin: 0;
 }
 
 .row-material {
@@ -489,6 +498,10 @@ label {
 .material-rows-single {
   height: auto;
   overflow-y: unset;
+}
+
+#newSenderInput {
+  width: 200px;
 }
 
 .compEntry {

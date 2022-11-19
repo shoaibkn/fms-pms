@@ -1,52 +1,49 @@
-const {
-  DataTypes
-} = require('sequelize');
-module.exports = sequelize => {
+const { DataTypes } = require("sequelize");
+module.exports = (sequelize) => {
   const attributes = {
     timestamp: {
       type: DataTypes.DATE,
+      allowNull: true,
+      defaultValue: DataTypes.NOW,
+      primaryKey: false,
+      autoIncrement: false,
+      comment: null,
+      field: "timestamp",
+    },
+    cid: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      primaryKey: true,
+      autoIncrement: true,
+      comment: null,
+      field: "cid",
+    },
+    date: {
+      type: DataTypes.DATEONLY,
       allowNull: true,
       defaultValue: null,
       primaryKey: false,
       autoIncrement: false,
       comment: null,
-      field: "timestamp"
-    },
-    cid: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      defaultValue: null,
-      primaryKey: true,
-      autoIncrement: false,
-      comment: null,
-      field: "cid"
-    },
-    date: {
-      type: DataTypes.DATEONLY,
-      allowNull: false,
-      defaultValue: null,
-      primaryKey: false,
-      autoIncrement: false,
-      comment: null,
-      field: "date"
+      field: "date",
     },
     recv_by: {
       type: DataTypes.STRING(150),
-      allowNull: false,
+      allowNull: true,
       defaultValue: null,
       primaryKey: false,
       autoIncrement: false,
       comment: null,
-      field: "recv_by"
+      field: "recv_by",
     },
     sender_nm: {
       type: DataTypes.STRING(255),
-      allowNull: false,
+      allowNull: true,
       defaultValue: null,
       primaryKey: false,
       autoIncrement: false,
       comment: null,
-      field: "sender_nm"
+      field: "sender_nm",
     },
     awb: {
       type: DataTypes.STRING(255),
@@ -55,34 +52,16 @@ module.exports = sequelize => {
       primaryKey: false,
       autoIncrement: false,
       comment: null,
-      field: "awb"
+      field: "awb",
     },
-    material_nm: {
-      type: DataTypes.STRING(255),
-      allowNull: false,
+    courier_nm: {
+      type: DataTypes.STRING(55),
+      allowNull: true,
       defaultValue: null,
       primaryKey: false,
       autoIncrement: false,
       comment: null,
-      field: "material_nm"
-    },
-    uom: {
-      type: DataTypes.STRING(12),
-      allowNull: false,
-      defaultValue: null,
-      primaryKey: false,
-      autoIncrement: false,
-      comment: null,
-      field: "uom"
-    },
-    qty: {
-      type: DataTypes.FLOAT,
-      allowNull: false,
-      defaultValue: null,
-      primaryKey: false,
-      autoIncrement: false,
-      comment: null,
-      field: "qty"
+      field: "courier_nm",
     },
     img: {
       type: DataTypes.STRING(255),
@@ -91,7 +70,7 @@ module.exports = sequelize => {
       primaryKey: false,
       autoIncrement: false,
       comment: null,
-      field: "img"
+      field: "img",
     },
     createdAt: {
       type: DataTypes.DATE,
@@ -100,23 +79,28 @@ module.exports = sequelize => {
       primaryKey: false,
       autoIncrement: false,
       comment: null,
-      field: "createdAt"
+      field: "createdAt",
     },
-    modifiedAt: {
+    updatedAt: {
       type: DataTypes.DATE,
       allowNull: true,
       defaultValue: null,
       primaryKey: false,
       autoIncrement: false,
       comment: null,
-      field: "modifiedAt"
-    }
+      field: "updatedAt",
+    },
   };
   const options = {
     tableName: "courier_in",
     comment: "",
-    indexes: []
+    indexes: [],
   };
-  const CourierInModel = sequelize.define("courier_in_model", attributes, options);
+  const CourierInModel = sequelize.define(
+    "courier_in_model",
+    attributes,
+    options
+  );
+
   return CourierInModel;
 };

@@ -1,7 +1,5 @@
-const {
-  DataTypes
-} = require('sequelize');
-module.exports = sequelize => {
+const { DataTypes } = require("sequelize");
+module.exports = (sequelize) => {
   const attributes = {
     timestamp: {
       type: DataTypes.DATE,
@@ -10,7 +8,7 @@ module.exports = sequelize => {
       primaryKey: false,
       autoIncrement: false,
       comment: null,
-      field: "timestamp"
+      field: "timestamp",
     },
     cid: {
       type: DataTypes.INTEGER,
@@ -19,7 +17,7 @@ module.exports = sequelize => {
       primaryKey: true,
       autoIncrement: false,
       comment: null,
-      field: "cid"
+      field: "cid",
     },
     date: {
       type: DataTypes.DATEONLY,
@@ -28,16 +26,16 @@ module.exports = sequelize => {
       primaryKey: false,
       autoIncrement: false,
       comment: null,
-      field: "date"
+      field: "date",
     },
-    recp: {
+    sender: {
       type: DataTypes.STRING(150),
       allowNull: false,
       defaultValue: null,
       primaryKey: false,
       autoIncrement: false,
       comment: null,
-      field: "recp"
+      field: "sender",
     },
     recp_nm: {
       type: DataTypes.STRING(255),
@@ -46,7 +44,7 @@ module.exports = sequelize => {
       primaryKey: false,
       autoIncrement: false,
       comment: null,
-      field: "recp_nm"
+      field: "recp_nm",
     },
     awb: {
       type: DataTypes.STRING(255),
@@ -55,7 +53,7 @@ module.exports = sequelize => {
       primaryKey: false,
       autoIncrement: false,
       comment: null,
-      field: "awb"
+      field: "awb",
     },
     material_nm: {
       type: DataTypes.STRING(255),
@@ -64,7 +62,7 @@ module.exports = sequelize => {
       primaryKey: false,
       autoIncrement: false,
       comment: null,
-      field: "material_nm"
+      field: "material_nm",
     },
     uom: {
       type: DataTypes.STRING(12),
@@ -73,7 +71,7 @@ module.exports = sequelize => {
       primaryKey: false,
       autoIncrement: false,
       comment: null,
-      field: "uom"
+      field: "uom",
     },
     qty: {
       type: DataTypes.FLOAT,
@@ -82,7 +80,7 @@ module.exports = sequelize => {
       primaryKey: false,
       autoIncrement: false,
       comment: null,
-      field: "qty"
+      field: "qty",
     },
     img: {
       type: DataTypes.STRING(255),
@@ -91,7 +89,7 @@ module.exports = sequelize => {
       primaryKey: false,
       autoIncrement: false,
       comment: null,
-      field: "img"
+      field: "img",
     },
     createdAt: {
       type: DataTypes.DATE,
@@ -100,7 +98,7 @@ module.exports = sequelize => {
       primaryKey: false,
       autoIncrement: false,
       comment: null,
-      field: "createdAt"
+      field: "createdAt",
     },
     modifiedAt: {
       type: DataTypes.DATE,
@@ -109,14 +107,18 @@ module.exports = sequelize => {
       primaryKey: false,
       autoIncrement: false,
       comment: null,
-      field: "modifiedAt"
-    }
+      field: "modifiedAt",
+    },
   };
   const options = {
     tableName: "courier_out",
     comment: "",
-    indexes: []
+    indexes: [],
   };
-  const CourierOutModel = sequelize.define("courier_out_model", attributes, options);
+  const CourierOutModel = sequelize.define(
+    "courier_out_model",
+    attributes,
+    options
+  );
   return CourierOutModel;
 };

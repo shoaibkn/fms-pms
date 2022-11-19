@@ -1,4 +1,5 @@
 const express = require("express");
+const fs = require("fs");
 const app = express();
 const path = require("path");
 const cors = require("cors");
@@ -8,32 +9,33 @@ const cookieParser = require("cookie-parser");
 const session = require("express-session");
 const bcrypt = require("bcrypt");
 const multer = require("multer");
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, "./Images");
-    console.log("Destination set");
-  },
-  filename: function (req, file, cb) {
-    cb(null, file.originalname);
-    console.log("fileName set");
-  },
-});
-const upload = multer({ dest: "./Images" });
+
+const upload = multer({ dest: "./Images/" });
+const billRecvUpload = multer({ dest: "./Images/BillRecv" });
+const courierInUpload = multer({ dest: "./Images/CourierIn" });
+const courierOutUpload = multer({ dest: "./Images/CourierOut" });
 
 // const upload = multer({storage:})
 //const AuthnDbModel = require("./models/authn_db");
-const db = require("./models");
+const db = require("../server/models");
 //const models = require("./models");
 const AuthnDbModel = db.authn_db_model;
 const BillRecv = db.BillRecvModel;
+const ClientList = db.client_list_model;
+const CourierInModel = db.courier_in_model;
+const CourierInDtlModel = db.courier_in_dtl_model;
+
+const CourierOutModel = db.courier_out_model;
+const CourierOutDtlModel = db.courier_out_dtl_model;
 const { createToken, validateToken } = require("./JWT");
 const {
   fetchMaterialsfunc,
   supplierListfunc,
   fetchMaterialsWOfunc,
   BillUpdate,
-} = require("./middleware/bill_receive_apis");
-const { createBrotliCompress } = require("zlib");
+} = require("./middleware/orc_bill_receive_apis");
+//const { createBrotliCompress } = require("zlib");
+//const { now } = require("sequelize/types/utils");
 //app.use(express.static(path.join(__dirname, "build")));
 
 app.use(
@@ -48,6 +50,7 @@ app.use(
 app.use(bp.json({ limit: "50mb" }));
 app.use(bp.urlencoded({ extended: true }));
 app.use(cookieParser());
+app.use("/BillImages", express.static("Images"));
 
 app.get("/", (req, res) => {
   res.send("backend working");
@@ -122,6 +125,45 @@ app.get("/dashboard", validateToken, (req, res) => {
   res.json({ sessionStatus: true, mod_list: modGen(501) });
 });
 
+db.sequelize.sync().then(() => {
+  app.listen(3501, () => {
+    console.log("SERVER RUNNING ON PORT 3501");
+  });
+});
+
+app.post("/bill_receive/updateBill", async (req, res) => {
+  const { billArr, billDtlArr, multStore } = req.body;
+  let update = await BillUpdate(req);
+  console.log(update.message);
+  if (update.message === "success") {
+    return res.status(200).json({ message: "Records Updated" });
+  } else {
+    console.log(update.message);
+    return res.json({ message: update.message });
+  }
+});
+
+app.post(
+  "/bill_receive/uploadImage",
+  billRecvUpload.single("bill_image"),
+  (req, res, next) => {
+    try {
+      let fileType = req.file.mimetype.split("/")[1];
+      let fileName = req.body.file_name + "." + fileType;
+      console.log(req.file);
+      console.log("./Images/" + req.file.filename);
+      console.log(req.body.file_name);
+      fs.rename(`./Images/${req.file.filename}`, `./Images/${fileName}`, () => {
+        console.log("File Renamed");
+      });
+      res.status(200).json({ message: "Image Successfully Updated" });
+    } catch (error) {
+      console.log(error);
+      res.status(400).json({ error: error });
+    }
+  }
+);
+
 app.get("/bill_receive/supplier_list", async (req, res) => {
   res.json(await supplierListfunc());
   //console.log(await supplierListfunc());
@@ -187,47 +229,160 @@ const modGen = (mod_id) => {
   //return status accepted and an array of all user modules
 };
 
-app.post("/bill_receive/updateBill", async (req, res) => {
-  const { billArr, billDtlArr, multStore } = req.body;
-  let update = await BillUpdate(req);
-  console.log(update.message);
-  if (update.message === "success") {
-    return res.status(200).json({ message: "Records Updated" });
-  } else {
-    return res.status(400).json({ message: update.message });
+//Courier APIs
+app.get("/courier/client_list", async (req, res) => {
+  let list = await ClientList.findAll({
+    attributes: ["client_nm"],
+    order: ["client_nm"],
+  });
+  res.send(list);
+  //console.log(list);
+});
+
+app.post("/courier_in/update", async (req, res) => {
+  const {
+    formDate,
+    recv_by,
+    sender_nm,
+    awb,
+    courier_nm,
+    img_link,
+    formDtlData,
+    formImage,
+  } = req.body;
+
+  console.log(req.body);
+
+  console.log(formImage);
+  try {
+    let courierInUpdate = await CourierInModel.create({
+      date: formDate,
+      recv_by: recv_by,
+      sender_nm: sender_nm,
+      awb: awb,
+      courier_nm: courier_nm,
+      img: img_link,
+    });
+    //console.log(courierInUpdate.cid);
+
+    try {
+      for (let mData of formDtlData) {
+        console.log(mData);
+        let courierInDtlUpdate = await CourierInDtlModel.create({
+          cid: courierInUpdate.cid,
+          material_nm: mData.material_nm,
+          material_uom: mData.material_uom,
+          material_qty: mData.material_qty,
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+
+    res.status(200).json({ message: "Successfully Updated." });
+  } catch (error) {
+    res
+      .status(400)
+      .json({ message: "Something Went Wrong.. NO changes were made" });
   }
 });
 
 app.post(
-  "/bill_receive/uploadImage",
-  upload.single("bill_image"),
-  async (req, res, next) => {
-    /*
-
-    /**
-   * upload(req, res, (err) => {
-    if (err) {
-      res.status(400).json({ message: "Something went wrong" });
-      return 0;
+  "/courier_out/imageUpload",
+  courierInUpload.single("courier_out_img"),
+  (req, res, next) => {
+    try {
+      let fileType = req.file.mimetype.split("/")[1];
+      let fileName = req.body.file_name + "." + fileType;
+      console.log(fileName);
+      console.log(req.body);
+      console.log("./Images/CourierOut/" + req.file.filename);
+      //console.log(req.body.file_name);
+      fs.rename(
+        `./Images/CourierOut/${req.file.filename}`,
+        `./Images/CourierOut/${fileName}`,
+        () => {
+          console.log("File Renamed");
+        }
+      );
+      res.status(200).json({ message: "Image Successfully Updated" });
+    } catch (error) {
+      console.log(error);
+      res.status(400).json({ error: error });
     }
-    console.log({ message: "Image Uploaded" });
-    res.send(req.file);
-    //res.json({ message: "File Uploaded" });
-  });
-   */
-    /*const file = req.file;
-    console.log(file.filename);
-    if (!file) {
-      const error = new Error("no File");
-      error.httpStatusCode = 400;
-      return next(error);
-    }
-    res.send(file);*/
   }
 );
 
-db.sequelize.sync().then(() => {
-  app.listen(3501, () => {
-    console.log("SERVER RUNNING ON PORT 3501");
-  });
+app.post("/courier_out/update", async (req, res) => {
+  const {
+    formDate,
+    sent_by,
+    recepient_nm,
+    awb,
+    courier_nm,
+    img_link,
+    formDtlData,
+    formImage,
+  } = req.body;
+
+  //console.log(req.body);
+
+  console.log(formImage);
+  try {
+    let courierOutUpdate = await CourierOutModel.create({
+      date: formDate,
+      sender: sent_by,
+      recp_nm: recepient_nm,
+      awb: awb,
+      courier_nm: courier_nm,
+      img: img_link,
+    });
+    //console.log(courierInUpdate.cid);
+
+    try {
+      for (let mData of formDtlData) {
+        console.log(mData);
+        let courierOutDtlUpdate = await CourierOutDtlModel.create({
+          cid: courierOutUpdate.cid,
+          material_nm: mData.material_nm,
+          material_uom: mData.material_uom,
+          material_qty: mData.material_qty,
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+
+    res.status(200).json({ message: "Successfully Updated." });
+  } catch (error) {
+    res
+      .status(400)
+      .json({ message: "Something Went Wrong.. NO changes were made" });
+  }
 });
+
+app.post(
+  "/courier_out/imageUpload",
+  courierOutUpload.single("courier_out_img"),
+  (req, res, next) => {
+    try {
+      let fileType = req.file.mimetype.split("/")[1];
+      let fileName = req.body.file_name + "." + fileType;
+      console.log(fileName);
+      console.log(req.body);
+      console.log("./Images/CourierOut/" + req.file.filename);
+      //console.log(req.body.file_name);
+      fs.rename(
+        `./Images/CourierOut/${req.file.filename}`,
+        `./Images/CourierOut/${fileName}`,
+        () => {
+          console.log("File Renamed");
+        }
+      );
+      res.status(200).json({ message: "Image Successfully Updated" });
+    } catch (error) {
+      console.log(error);
+      res.status(400).json({ error: error });
+    }
+  }
+);

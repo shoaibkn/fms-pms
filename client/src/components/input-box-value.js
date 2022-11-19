@@ -1,7 +1,8 @@
 export default function InputBoxValue(props) {
+  let classA = `${props.classA} input-form-value`;
   return (
     <input
-      className="input-form-value"
+      className={classA}
       htmlFor={props.for}
       id={props.id}
       type={props.type}

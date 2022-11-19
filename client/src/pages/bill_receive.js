@@ -13,7 +13,7 @@ export default function BillReceive() {
   const [supplierList, setSupplierList] = useState([]);
   const [materialList, setMaterialList] = useState([]);
   const [image, setImage] = useState();
-  const [imageName, setImageName] = useState([]);
+  const [upImage, setUpImage] = useState();
   const [fileUploadClass, setFileUploadClass] = useState("class-hidden");
 
   //useEffect Hook to fetch supplier names
@@ -67,7 +67,7 @@ export default function BillReceive() {
           if (response.data === "Materials not Found") {
             alert("No Materials Found");
           } else {
-            console.log(response.data);
+            console.log(response.data[0]);
             setMaterialList(response.data[0]);
           }
           //console.log(response.data[0]);
@@ -162,6 +162,7 @@ export default function BillReceive() {
         setImage(e.target.result);
       };
       reader.readAsDataURL(event.target.files[0]);
+      setUpImage(event.target.files[0]);
       console.log(image);
     }
   };
@@ -232,43 +233,60 @@ export default function BillReceive() {
       }
     }
 
-    axios
-      .post(ipL + "/bill_receive/updateBill", {
-        billArr: detailsPr,
-        billDtlArr: detailsSe,
-        multStore: false,
-      })
-      .then((response) => {
-        alert(response.data.message);
-        if (response.data.message === "Records Updated") {
-          //clearPage();
-        }
-      });
+    try {
+      axios
+        .post(ipL + "/bill_receive/updateBill", {
+          billArr: detailsPr,
+          billDtlArr: detailsSe,
+          multStore: false,
+        })
+        .then((response) => {
+          alert(response.data.message);
+          if (response.data.message === "Records Updated") {
+            console.log(detailsPr.bill_num + "_" + detailsPr.sup_name);
 
-    const data = new FormData();
-    data.append("bill_image", image);
-    axios.post("/bill_receive/uploadImage", data).then((response) => {
-      console.log(data);
-      //console.log(response.file);
-    });
+            const data = new FormData();
+            data.append("bill_image", upImage);
+            data.append(
+              "file_name",
+              detailsPr[0].bill_num + "_" + detailsPr[0].sup_name
+            );
+            try {
+              axios.post("/bill_receive/uploadImage", data).then((response) => {
+                console.log(data);
+                if (response.status === 200) {
+                  clearPage();
+                } else {
+                  alert(
+                    "Critical Error!! Image could not be uploaded. Please Contact administrator!!"
+                  );
+                }
+              });
+            } catch (error) {
+              alert(error);
+            }
+          }
+        });
+    } catch (error) {
+      console.log(error);
+    }
 
     function removeDuplicates(arr) {
       return [...new Set(arr)];
     }
-
-    //clearPage();
   };
-  /*
   function clearPage() {
     setPoStore("");
     setMaterialList([]);
     setImage("");
+    setUpImage("");
+    setFileUploadClass("class-hidden");
     document.getElementById("billNum").value = "";
     document.getElementById("supName").value = "";
     document.getElementById("billDate").value = "";
     document.getElementById("bill_amt").value = "";
   }
-*/
+
   return (
     <div className="billScreen">
       <form>

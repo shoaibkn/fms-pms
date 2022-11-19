@@ -1,9 +1,15 @@
 export default function TableRowStatic(props) {
   return (
     <div className="table-row" key={props.id}>
-      <p className="row-material">{props.matName}</p>
-      <span className="row-uom">{props.uom}</span>
-      <p className="row-qty">{props.qty}</p>
+      <p className="row-material" key={`${props.id}-mat`}>
+        {props.matName}
+      </p>
+      <p className="row-uom" key={`${props.id}-uom`}>
+        {props.uom}
+      </p>
+      <span className="row-qty" key={`${props.id}-qty`}>
+        {props.qty}
+      </span>
     </div>
   );
 }

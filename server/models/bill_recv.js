@@ -55,6 +55,15 @@ module.exports = (sequelize) => {
       comment: null,
       field: "bill_amt",
     },
+    bill_img_link: {
+      type: DataTypes.STRING(255),
+      allowNull: true,
+      defaultValue: null,
+      primaryKey: false,
+      autoIncrement: false,
+      comment: null,
+      field: "bill_img_link",
+    },
     createdAt: {
       type: DataTypes.DATE,
       allowNull: true,
