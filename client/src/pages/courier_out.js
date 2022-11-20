@@ -106,7 +106,7 @@ export default function CourierOut() {
       recepient_nm: document.getElementById("recpName").value,
       awb: document.getElementById("awbInput").value,
       courier_nm: document.getElementById("courierPartner").value,
-      img_link: `192.168.1.105:3500/courier_in/images/${
+      img_link: `192.168.1.105:3500/courier_out/images/${
         file_name +
         "." +
         image.name.split(".")[image.name.split(".").length - 1]
@@ -124,11 +124,13 @@ export default function CourierOut() {
       }
     });
 
-    axios.post(`${ipL}/courier_out/imageUpload`, data).then((response) => {
+    /**
+ *     axios.post(`${ipL}/courier_out/imageUpload`, data).then((response) => {
       if (response.status === 400) {
         console.log("Critical Error Occurred");
       }
     });
+ */
   };
 
   function clearForm() {

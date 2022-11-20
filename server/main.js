@@ -288,19 +288,19 @@ app.post("/courier_in/update", async (req, res) => {
 });
 
 app.post(
-  "/courier_out/imageUpload",
-  courierInUpload.single("courier_out_img"),
+  "/courier_in/imageUpload",
+  courierInUpload.single("courier_in_img"),
   (req, res, next) => {
     try {
       let fileType = req.file.mimetype.split("/")[1];
       let fileName = req.body.file_name + "." + fileType;
       console.log(fileName);
       console.log(req.body);
-      console.log("./Images/CourierOut/" + req.file.filename);
+      console.log("./Images/CourierIn/" + req.file.filename);
       //console.log(req.body.file_name);
       fs.rename(
-        `./Images/CourierOut/${req.file.filename}`,
-        `./Images/CourierOut/${fileName}`,
+        `./Images/CourierIn/${req.file.filename}`,
+        `./Images/Courierin/${fileName}`,
         () => {
           console.log("File Renamed");
         }

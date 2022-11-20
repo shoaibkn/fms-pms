@@ -54,9 +54,9 @@ export default function CourierIn() {
 
   let updateFileUploadClass = () => {
     if (
-      document.getElementById("courierDateInput").value != "" &&
-      document.getElementById("recvBy").value != "" &&
-      document.getElementById("supName").innerHTML != ""
+      document.getElementById("courierDateInput").value !== "" &&
+      document.getElementById("recvBy").value !== "" &&
+      document.getElementById("supName").innerHTML !== ""
     ) {
       setFileUploadClass("");
     } else {
@@ -69,9 +69,9 @@ export default function CourierIn() {
   };
   let onImgBtnClick = () => {
     if (
-      document.getElementById("courierDateInput").value == "" ||
-      document.getElementById("recvBy").value == "" ||
-      document.getElementById("supName").innerHTML == ""
+      document.getElementById("courierDateInput").value === "" ||
+      document.getElementById("recvBy").value === "" ||
+      document.getElementById("supName").innerHTML === ""
     ) {
       alert("Incomplete Details Provided");
     }
@@ -116,13 +116,15 @@ export default function CourierIn() {
 
     //console.log(formData.formImage);
     //const { formDate, recv_by, sender_nm, awb, courier_nm, img_link }
-    axios.post(`${ipL}/courier_in/update`, formData).then((response) => {
+    /**
+     * axios.post(`${ipL}/courier_in/update`, formData).then((response) => {
       if (response.status === 400) {
         alert(response.data.message);
       } else if (response.status === 200) {
         alert(response.data.message);
       }
     });
+     */
 
     axios.post(`${ipL}/courier_in/imageUpload`, data).then((response) => {
       if (response.status === 400) {

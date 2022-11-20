@@ -3,7 +3,7 @@
     "username": "shoaibkn",
     "password": "keepcalm",
     "database": "vrd_app",
-    "host": "192.168.1.43",
+    "host": "103.207.64.233",
     "dialect": "mysql",
     "logging": false
   },
@@ -11,7 +11,7 @@
     "username": "shoaibkn",
     "password": "keepcalm",
     "database": "vrd_app",
-    "host": "192.168.1.43",
+    "host": "103.207.64.233",
     "dialect": "mysql",
     "logging": false
   },
@@ -19,7 +19,7 @@
     "username": "shoaibkn",
     "password": "keepcalm",
     "database": "vrd_app",
-    "host": "192.168.1.43",
+    "host": "103.207.64.233",
     "dialect": "mysql",
     "logging": false
   }
