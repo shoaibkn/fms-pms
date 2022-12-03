@@ -175,12 +175,13 @@ select::selection {
 .block {
   box-sizing: border-box;
   height: 97px;
-  background-color: #d9d9d9;
-  border-radius: 10px;
   font-weight: 500;
   font-size: 14px;
   padding: 54px 10px 12px 10px;
-  box-shadow: 4px 4px 10px 1px rgba(97, 97, 97, 0.15);
+  background: #7494e5;
+  box-shadow: 4px 4px 10px 2px #bbceff,
+    inset -4px -4px 15px 0.5px rgba(74, 125, 255, 0.49);
+  border-radius: 10px;
 }
 
 .block:hover {
@@ -192,6 +193,10 @@ select::selection {
 
 a {
   text-decoration: none;
+  color: white;
+}
+
+.nav-data > a {
   color: black;
 }
 
@@ -633,6 +638,7 @@ label {
 
   .block-name {
     width: 90%;
+    color: #ffffff !important;
   }
 
   .window {

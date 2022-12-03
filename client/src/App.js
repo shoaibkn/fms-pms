@@ -6,6 +6,7 @@ import AccountsTasks from "./pages/accounts_task";
 import BillIssueNote from "./pages/bill_issue_note";
 import BillReceive from "./pages/bill_receive";
 import BillRecvNote from "./pages/bill_recv_note";
+import IMCDTasks from "./pages/imcd_tasks";
 import CourierIn from "./pages/courier_in";
 import CourierOut from "./pages/courier_out";
 import GRNTasks from "./pages/grn_tasks";
@@ -26,12 +27,11 @@ function App() {
         <Route path="dashboard" element={<Dashboard />} />
         <Route path="*" element={<NotFound />} />
         <Route path="dashboard/accounts_task" element={<AccountsTasks />} />
-        <Route path="dashboard/bill_issue_note" element={<BillIssueNote />} />
         <Route path="dashboard/bill_receive" element={<BillReceive />} />
-        <Route path="dashboard/bill_recv_note" element={<BillRecvNote />} />
         <Route path="dashboard/courier_in" element={<CourierIn />} />
         <Route path="dashboard/courier_out" element={<CourierOut />} />
         <Route path="dashboard/grn_tasks" element={<GRNTasks />} />
+        <Route path="dashboard/imcd_tasks" element={<IMCDTasks />} />
         <Route path="dashboard/store_tasks" element={<StoreTasks />} />
         <Route path="dashboard/wo_bill_receive" element={<WOBillReceive />} />
         <Route path="componentTest" element={<ComponentTest />} />

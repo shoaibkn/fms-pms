@@ -325,7 +325,7 @@ app.post("/courier_out/update", async (req, res) => {
     formImage,
   } = req.body;
 
-  //console.log(req.body);
+  console.log(req.body);
 
   console.log(formImage);
   try {
@@ -337,7 +337,7 @@ app.post("/courier_out/update", async (req, res) => {
       courier_nm: courier_nm,
       img: img_link,
     });
-    //console.log(courierInUpdate.cid);
+    console.log(courierOutUpdate.cid);
 
     try {
       for (let mData of formDtlData) {
@@ -355,9 +355,8 @@ app.post("/courier_out/update", async (req, res) => {
 
     res.status(200).json({ message: "Successfully Updated." });
   } catch (error) {
-    res
-      .status(400)
-      .json({ message: "Something Went Wrong.. NO changes were made" });
+    console.log("Error Occurred");
+    res.json({ error: error });
   }
 });
 

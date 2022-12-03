@@ -78,6 +78,9 @@ export default function CourierOut() {
   };
 
   let submitData = () => {
+    if (image === null) {
+      alert("Please Attach Document.");
+    }
     const data = new FormData();
     //console.log(image);
     data.append("courier_out_img", image);
@@ -100,37 +103,47 @@ export default function CourierOut() {
         material_qty: row.children[2].innerHTML,
       });
     }
-    let formData = {
-      formDate: document.getElementById("courierDateInput").value,
-      sent_by: document.getElementById("sentBy").value,
-      recepient_nm: document.getElementById("recpName").value,
-      awb: document.getElementById("awbInput").value,
-      courier_nm: document.getElementById("courierPartner").value,
-      img_link: `192.168.1.105:3500/courier_out/images/${
-        file_name +
-        "." +
-        image.name.split(".")[image.name.split(".").length - 1]
-      }`,
-      formDtlData: materialData,
-    };
+    let formData;
+    try {
+      formData = {
+        formDate: document.getElementById("courierDateInput").value,
+        sent_by: document.getElementById("sentBy").value,
+        recepient_nm: document.getElementById("recpName").value,
+        awb: document.getElementById("awbInput").value,
+        courier_nm: document.getElementById("courierPartner").value,
+        img_link: `192.168.1.105:3500/courier_out/images/${
+          file_name +
+          "." +
+          image.name.split(".")[image.name.split(".").length - 1]
+        }`,
+        formDtlData: materialData,
+      };
+    } catch (error) {
+      console.log("Cannot Initialise form data.");
+      alert("Cannot Initialise form data.");
+      return 0;
+    }
 
     //console.log(formData.formImage);
     //const { formDate, sent_by, sender_nm, awb, courier_nm, img_link }
-    axios.post(`${ipL}/courier_out/update`, formData).then((response) => {
-      if (response.status === 400) {
-        alert(response.data.message);
-      } else if (response.status === 200) {
-        alert(response.data.message);
-      }
-    });
-
-    /**
- *     axios.post(`${ipL}/courier_out/imageUpload`, data).then((response) => {
+    try {
+      axios.post(`${ipL}/courier_out/update`, formData).then((response) => {
+        console.log(response.data.message);
+        console.log(response.data.error);
+        if (response.status === 400) {
+          alert(response.data.message);
+        } else if (response.status === 200) {
+          alert(response.data.message);
+        }
+      });
+    } catch (error) {
+      console.log(error);
+    }
+    axios.post(`${ipL}/courier_out/imageUpload`, data).then((response) => {
       if (response.status === 400) {
         console.log("Critical Error Occurred");
       }
     });
- */
   };
 
   function clearForm() {

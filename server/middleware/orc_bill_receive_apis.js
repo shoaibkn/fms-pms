@@ -15,7 +15,7 @@ async function supplierListfunc() {
       connection = await oracledb.getConnection({
         user: "shoetech",
         password: "temppass",
-        connectString: "103.207.64.233/ORCL", //change IP to global in production
+        connectString: "192.168.1.43/ORCL", //change IP to global in production
       });
     } catch (error) {
       console.log("Cannot create Connection with Database");
@@ -127,7 +127,7 @@ const fetchMaterialsfunc = async (supplierName, store_po) => {
       connection = await oracledb.getConnection({
         user: "shoetech",
         password: "temppass",
-        connectString: "103.207.64.233/ORCL",
+        connectString: "192.168.1.43/ORCL",
       });
     } catch (error) {
       console.log("Cannot create Connection with Database");
@@ -195,7 +195,7 @@ const fetchMaterialsWOfunc = async (supplierName, store_po) => {
       connection = await oracledb.getConnection({
         user: "shoetech",
         password: "temppass",
-        connectString: "103.207.64.233/ORCL",
+        connectString: "192.168.1.43/ORCL",
       });
     } catch (error) {
       console.log("Cannot create Connection with Database");

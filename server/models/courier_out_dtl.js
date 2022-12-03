@@ -1,5 +1,5 @@
 const { DataTypes } = require("sequelize");
-module.exports = async (sequelize) => {
+module.exports = (sequelize) => {
   const attributes = {
     timestamp: {
       type: DataTypes.DATE,
@@ -77,6 +77,5 @@ module.exports = async (sequelize) => {
     attributes,
     options
   );
-
   return CourierOutDtlModel;
 };

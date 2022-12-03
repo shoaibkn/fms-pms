@@ -2,7 +2,8 @@
   min-width: 1200px;
 }
 
-.table-row-multi-grn {
+.table-row-multi-grn,
+.table-row-multi-imcd {
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
@@ -18,7 +19,8 @@
   margin-bottom: 6px;
 }
 
-.table-row-multi-grn > p,
+.table-row-multi-grn,
+.table-row-multi-imcd > p,
 span {
   margin-top: 2px;
 }

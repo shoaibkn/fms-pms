@@ -31,6 +31,8 @@ function linkName(name) {
       return "courier_in";
     case "Courier Out":
       return "courier_out";
+    case "IMCD Tasks":
+      return "imcd_tasks";
     case "Bill Transfer Note":
       return "bill_issue_note";
     case "Bill Receive Note":

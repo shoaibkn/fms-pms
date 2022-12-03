@@ -1,5 +1,5 @@
 const { DataTypes } = require("sequelize");
-module.exports = (sequelize) => {
+module.exports = async (sequelize) => {
   const attributes = {
     bm_id: {
       type: DataTypes.INTEGER,
@@ -77,6 +77,42 @@ module.exports = (sequelize) => {
       comment: null,
       field: "qty",
     },
+    imcdAt: {
+      type: DataTypes.DATE,
+      allowNull: true,
+      defaultValue: null,
+      primaryKey: false,
+      autoIncrement: false,
+      comment: null,
+      field: "imcdAt",
+    },
+    grnAt: {
+      type: DataTypes.DATE,
+      allowNull: true,
+      defaultValue: null,
+      primaryKey: false,
+      autoIncrement: false,
+      comment: null,
+      field: "grnAt",
+    },
+    storeAt: {
+      type: DataTypes.DATE,
+      allowNull: true,
+      defaultValue: null,
+      primaryKey: false,
+      autoIncrement: false,
+      comment: null,
+      field: "storeAt",
+    },
+    accountsAt: {
+      type: DataTypes.DATE,
+      allowNull: true,
+      defaultValue: null,
+      primaryKey: false,
+      autoIncrement: false,
+      comment: null,
+      field: "accountsAt",
+    },
     createdAt: {
       type: DataTypes.DATE,
       allowNull: true,
@@ -113,5 +149,6 @@ module.exports = (sequelize) => {
     attributes,
     options
   );
+  await BillReceiveDtlModel.sync();
   return BillReceiveDtlModel;
 };
